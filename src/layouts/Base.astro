@@ -36,7 +36,13 @@ const locale = lang === 'en' ? 'en_US' : SITE.locale;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script is:inline>
       // Tema seçimi ilk boyamadan önce uygulanır (yanıp sönme olmasın). Bkz. ThemeToggle.astro.
-      try { var t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+      // Kayıtlı seçim yoksa ilk açılışta cihaz tercihi alınır; düğme yalnız Açık ↔ Koyu arasında geçer.
+      (function () {
+        var t = null;
+        try { t = localStorage.getItem('theme'); } catch (e) {}
+        if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.dataset.theme = t;
+      })();
     </script>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />

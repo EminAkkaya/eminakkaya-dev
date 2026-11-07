@@ -1,68 +1,50 @@
 ---
-// Tema seçici: Sistem → Açık → Koyu döngüsü. Seçim localStorage('theme') içinde,
-// <html data-theme> ile uygulanır; ilk boyama öncesi Base.astro'daki inline script uygular.
-// JS kapalıysa düğme gizli kalır, site sistem tercihini izler.
+// Tema düğmesi: Açık ↔ Koyu. Seçim localStorage('theme') içinde, <html data-theme> ile uygulanır.
+// İlk boyamadan önce Base.astro'daki inline script uygular (kayıt yoksa cihaz tercihi).
+// JS kapalıysa düğme gizli kalır, site cihaz tercihini izler.
 import Icon from './Icon.astro';
 interface Props { lang?: 'tr' | 'en' }
 const { lang = 'tr' } = Astro.props;
-const label = lang === 'en' ? 'Theme: system. Switch to light' : 'Tema: Sistem. Açık temaya geç';
+const label = lang === 'en' ? 'Switch to dark theme' : 'Koyu temaya geç';
 ---
 
-<button type="button" class="theme-toggle" data-theme-toggle data-choice="system" aria-label={label} title={label} hidden>
-  <span data-icon="system"><Icon name="monitor" size={20} /></span>
-  <span data-icon="light"><Icon name="sun" size={20} /></span>
-  <span data-icon="dark"><Icon name="moon" size={20} /></span>
+<button type="button" class="theme-toggle" data-theme-toggle data-choice="light" aria-label={label} title={label} hidden>
+  <span data-icon="light"><Icon name="moon" size={20} /></span>
+  <span data-icon="dark"><Icon name="sun" size={20} /></span>
 </button>
 
 <script>
-  type Choice = 'system' | 'light' | 'dark';
+  type Choice = 'light' | 'dark';
   const KEY = 'theme';
-  const ORDER: Choice[] = ['system', 'light', 'dark'];
   const en = document.documentElement.lang === 'en';
-  // Erişilebilir ad: şu anki seçim + tıklayınca ne olacağı.
+  // Erişilebilir ad, tıklayınca ne olacağını söyler; ikon da gidilecek temayı gösterir.
   const LABELS: Record<Choice, string> = en
-    ? { system: 'Theme: system. Switch to light', light: 'Theme: light. Switch to dark', dark: 'Theme: dark. Switch to system' }
-    : { system: 'Tema: Sistem. Açık temaya geç', light: 'Tema: Açık. Koyu temaya geç', dark: 'Tema: Koyu. Sistem temasına geç' };
+    ? { light: 'Switch to dark theme', dark: 'Switch to light theme' }
+    : { light: 'Koyu temaya geç', dark: 'Açık temaya geç' };
   // Tarayıcı çubuğu renkleri Base.astro'daki theme-color meta'larından okunur (ham hex burada yok).
   const metas = [...document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')];
   metas.forEach((m) => { m.dataset.own ??= m.content; });
-  const colorFor = (scheme: 'light' | 'dark') =>
-    metas.find((m) => m.media.includes(scheme))?.dataset.own ?? '';
+  const colorFor = (scheme: Choice) => metas.find((m) => m.media.includes(scheme))?.dataset.own ?? '';
 
-  const read = (): Choice => {
-    try {
-      const v = localStorage.getItem(KEY);
-      return v === 'light' || v === 'dark' ? v : 'system';
-    } catch {
-      return 'system';
-    }
-  };
+  const current = (): Choice => (document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
 
   const apply = (choice: Choice) => {
-    const root = document.documentElement;
-    if (choice === 'system') delete root.dataset.theme;
-    else root.dataset.theme = choice;
-    // Tarayıcı çubuğu rengi seçime uysun; sistemde media sorgulu ilk değerlere döner.
-    metas.forEach((m) => {
-      m.content = (choice === 'system' ? m.dataset.own : colorFor(choice)) ?? m.content;
-    });
+    document.documentElement.dataset.theme = choice;
+    metas.forEach((m) => { m.content = colorFor(choice) || m.content; });
     document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
-      const text = LABELS[choice];
       btn.dataset.choice = choice;
-      btn.setAttribute('aria-label', text);
-      btn.title = text;
+      btn.setAttribute('aria-label', LABELS[choice]);
+      btn.title = LABELS[choice];
     });
   };
 
-  apply(read());
+  apply(current());
   document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]').forEach((btn) => {
     btn.hidden = false;
     btn.addEventListener('click', () => {
-      const cur = (btn.dataset.choice as Choice) ?? 'system';
-      const next = ORDER[(ORDER.indexOf(cur) + 1) % ORDER.length];
+      const next: Choice = current() === 'dark' ? 'light' : 'dark';
       try {
-        if (next === 'system') localStorage.removeItem(KEY);
-        else localStorage.setItem(KEY, next);
+        localStorage.setItem(KEY, next);
       } catch {
         /* depolama kapalı: yalnız bu sayfada uygulanır */
       }
@@ -89,7 +71,6 @@ const label = lang === 'en' ? 'Theme: system. Switch to light' : 'Tema: Sistem. 
     .theme-toggle:hover { color: var(--text); background: var(--bg-hover); }
     .theme-toggle:active { transform: translateY(1px); }
     .theme-toggle [data-icon] { display: none; }
-    .theme-toggle[data-choice='system'] [data-icon='system'],
     .theme-toggle[data-choice='light'] [data-icon='light'],
     .theme-toggle[data-choice='dark'] [data-icon='dark'] { display: block; }
   }

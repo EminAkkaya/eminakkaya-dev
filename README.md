@@ -37,9 +37,9 @@ aynı dosyadaki `DEFAULT_MESSAGE`. Numara sitede düz metin olarak yazılmaz, ya
 
 ### Tema
 
-Üst menüdeki düğme Sistem → Açık → Koyu arasında döner; seçim `localStorage` (`theme`) içinde
-saklanır ve `<html data-theme>` ile uygulanır (Base.astro'daki küçük inline script ilk boyamadan
-önce uygular). Renkler `src/styles/tokens.css`: koyu değerler hem `prefers-color-scheme` hem
+Üst menüdeki düğme Açık ↔ Koyu arasında geçer; seçim `localStorage` (`theme`) içinde saklanır ve
+`<html data-theme>` ile uygulanır. Base.astro'daki küçük inline script ilk boyamadan önce uygular;
+kayıt yoksa ilk açılışta cihaz tercihini alır. Renkler `src/styles/tokens.css`: koyu değerler hem `prefers-color-scheme` hem
 `:root[data-theme='dark']` bloğunda bulunur; birini değiştirirsen ikisini birlikte değiştir.
 
 ### Yeni çalışma eklemek
