@@ -85,7 +85,13 @@
         "duration": 11.5,
         "muted": true
       },
-      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi."
+      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi.",
+      "thumb": {
+        "src": "/media/projects/whatsapp-siparis/thumb.webp",
+        "alt": "Sipariş paneline düşen tek bir sipariş kartının yakın görünümü: 'Kaydedildi' durumu, örnek müşteri, adres ve ürünler (sahte veri)",
+        "w": 960,
+        "h": 600
+      }
     },
     "fatura-otomasyonu": {
       "cover": "/media/projects/fatura-otomasyonu/cover.webp",
@@ -106,7 +112,13 @@
           "h": 832
         }
       ],
-      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi."
+      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi.",
+      "thumb": {
+        "src": "/media/projects/fatura-otomasyonu/thumb.webp",
+        "alt": "Kesilmeyi bekleyen faturalar tablosunun yakın görünümü: ad, kalem ve fiyat sütunları (sahte veri)",
+        "w": 960,
+        "h": 600
+      }
     },
     "whatsagent": {
       "cover": "/media/projects/whatsagent/cover.webp",
@@ -127,7 +139,13 @@
           "h": 1000
         }
       ],
-      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi."
+      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi.",
+      "thumb": {
+        "src": "/media/projects/whatsagent/thumb.webp",
+        "alt": "Örnek konuşma: WhatsApp'tan ERP asistanına cari bakiyesi soruluyor, asistan bakiyeyi yanıtlıyor (temsili, sahte veri)",
+        "w": 960,
+        "h": 600
+      }
     },
     "learncard": {
       "cover": "/media/projects/learncard/cover.webp",
@@ -169,6 +187,12 @@
         "h": 800,
         "duration": 12.0,
         "muted": true
+      },
+      "thumb": {
+        "src": "/media/projects/learncard/thumb.webp",
+        "alt": "LearnCard okuyucu ekranının üst kısmı: metindeki kelimeler öğrenme durumuna göre renkli altı çizili",
+        "w": 960,
+        "h": 600
       }
     },
     "dncyedek": {
@@ -211,6 +235,12 @@
         "h": 800,
         "duration": 14.2,
         "muted": true
+      },
+      "thumb": {
+        "src": "/media/projects/dncyedek/thumb.webp",
+        "alt": "Yedek arşivinin yakın görünümü: her yedek dosyasının yanında 'Doğrulandı' rozeti (sahte veri)",
+        "w": 960,
+        "h": 600
       }
     },
     "webnot": {
@@ -247,48 +277,12 @@
         "h": 800,
         "duration": 12.0,
         "muted": true
-      }
-    },
-    "kpss": {
-      "cover": "/media/projects/kpss/cover.webp",
-      "coverAlt": "KPSS coğrafya harita atölyesi: katmanlı Türkiye haritası ve seçilen öğenin bilgi kartı",
-      "coverW": 1600,
-      "coverH": 1000,
-      "shots": [
-        {
-          "src": "/media/projects/kpss/shot-1.webp",
-          "alt": "Harita: dağlar katmanı açık, seçilen bölgenin notu ve çıkmış sorulardaki sıklığı",
-          "w": 1440,
-          "h": 900
-        },
-        {
-          "src": "/media/projects/kpss/shot-2.webp",
-          "alt": "Soru bankası: çoktan seçmeli soru, doğru cevap vurgusu ve açıklama",
-          "w": 1440,
-          "h": 900
-        },
-        {
-          "src": "/media/projects/kpss/shot-3.webp",
-          "alt": "Çıkmış soru analizi: konu ve yıl bazında soru dağılımı tablosu",
-          "w": 1440,
-          "h": 900
-        },
-        {
-          "src": "/media/projects/kpss/shot-4.webp",
-          "alt": "Konu anlatımı: başlık listesi ve öne çıkan noktalar",
-          "w": 1440,
-          "h": 900
-        }
-      ],
-      "demo": {
-        "mp4": "/media/projects/kpss/demo.mp4",
-        "webm": "/media/projects/kpss/demo.webm",
-        "poster": "/media/projects/kpss/demo-poster.webp",
-        "alt": "Harita katmanlarını açıp öğe seçme, ardından soru bankasında bir soruyu cevaplama",
-        "w": 1280,
-        "h": 800,
-        "duration": 11.6,
-        "muted": true
+      },
+      "thumb": {
+        "src": "/media/projects/webnot/thumb.webp",
+        "alt": "Webnot mobil görünümünün üst kısmı: arama çubuğu, Tüm Notlar başlığı ve ilk not kartı (sahte veri)",
+        "w": 960,
+        "h": 600
       }
     }
   }
