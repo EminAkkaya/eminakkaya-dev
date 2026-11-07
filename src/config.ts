@@ -10,16 +10,17 @@ export const SITE = {
   locale: 'tr_TR',
 };
 
-// TODO(Emin): WhatsApp iş hattı numarasını ülke koduyla, boşluksuz yaz (ör. '905xxxxxxxxx').
-// Boş kaldığı sürece "WhatsApp'tan yaz" butonları e-postaya düşer.
-export const WHATSAPP_NUMBER = '';
+// WhatsApp numarası: ülke koduyla, boşluksuz, başında + ve 0 olmadan (0551 154 66 98 → '905511546698').
+// Boş bırakılırsa "WhatsApp'tan yaz" butonları e-postaya düşer.
+export const WHATSAPP_NUMBER = '905511546698';
 
 export const EMAIL = 'iletisim@eminakkaya.dev';
 export const GITHUB_URL = 'https://github.com/EminAkkaya';
 export const LOCATION = 'Sakarya ve uzaktan';
 
+// WhatsApp'ta hazır açılan karşılama mesajı ("..." kısmını kullanıcı doldurur).
 export const DEFAULT_MESSAGE =
-  'Merhaba Emin, işletmemizde otomatikleştirmek istediğimiz bir iş var. Kısaca konuşabilir miyiz?';
+  'Merhaba Emin, sitenden ulaşıyorum. İşletmem için ... konusunda konuşmak istiyorum.';
 
 export interface ContactLink {
   href: string;

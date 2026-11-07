@@ -12,11 +12,24 @@ const media = projectMedia(d.slug, d.title, d);
 const href = `/calismalar/${d.slug}`;
 const H = headingLevel;
 const big = size !== 'sm';
-const coverAlt = `${d.title} ekranından bir görünüm`;
+// Kartta özel küçük görsel (thumb) varsa o, yoksa kapak (cover) küçültülerek kullanılır.
+const cardImg = media.thumb
+  ? media.thumb
+  : media.cover
+    ? { src: media.cover, alt: media.coverAlt ?? `${d.title} ekranından bir görünüm`, w: undefined, h: undefined }
+    : null;
 ---
 
 <article class="pcard" data-size={size}>
-  {big && <MediaFrame src={media.cover} alt={coverAlt} title={d.title} />}
+  {big && (
+    <MediaFrame
+      src={cardImg?.src ?? null}
+      alt={cardImg?.alt ?? ''}
+      title={d.title}
+      width={cardImg?.w}
+      height={cardImg?.h}
+    />
+  )}
   <div class="pcard__body">
     <div class="cluster pcard__meta">
       <StatusBadge status={d.status} />

@@ -1,5 +1,6 @@
 ---
 import ContactButton from './ContactButton.astro';
+import ThemeToggle from './ThemeToggle.astro';
 
 interface Props { lang?: 'tr' | 'en' }
 const { lang = 'tr' } = Astro.props;
@@ -35,11 +36,14 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
         ))}
       </ul>
     </nav>
-    {lang === 'tr' && (
-      <div class="site-header__cta">
-        <ContactButton size="sm" />
-      </div>
-    )}
+    <div class="site-header__tools">
+      <ThemeToggle lang={lang} />
+      {lang === 'tr' && (
+        <div class="site-header__cta">
+          <ContactButton size="sm" />
+        </div>
+      )}
+    </div>
   </div>
 </header>
 
@@ -109,10 +113,12 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
       text-decoration-thickness: 2px;
       text-underline-offset: 0.45em;
     }
+    .site-header__tools { display: flex; align-items: center; gap: var(--space-2); }
     .site-header__cta { display: none; }
 
     @media (min-width: 860px) {
       .site-nav { order: 0; flex-basis: auto; margin-inline-start: auto; }
+      .site-header__inner { column-gap: var(--space-4); }
       .site-nav a { font-size: var(--fs-base); padding-inline: var(--space-3); }
       .site-header__cta { display: block; }
     }

@@ -27,7 +27,6 @@ const d = project.data;
 const { Content } = await render(project);
 const media = projectMedia(d.slug, d.title, d);
 const shots = media.shots;
-const message = `Merhaba Emin, "${d.title}" çalışmanızı gördüm. Bizde de benzer bir iş var, konuşabilir miyiz?`;
 ---
 
 <Base title={d.title} description={`${d.headline}. ${d.summary}`} ogType="article">
@@ -89,8 +88,8 @@ const message = `Merhaba Emin, "${d.title}" çalışmanızı gördüm. Bizde de 
           <div class="shots__grid">
             {shots.map((s) => (
               <figure>
-                <a href={s.src} class="shots__link">
-                  <img src={s.src} alt={s.alt} loading="lazy" decoding="async" />
+                <a href={s.src} class="shots__link" data-lightbox={`shots-${d.slug}`}>
+                  <img src={s.src} alt={s.alt} loading="lazy" decoding="async" width={s.w} height={s.h} />
                 </a>
                 <figcaption class="small muted">{s.alt}</figcaption>
               </figure>
@@ -136,7 +135,7 @@ const message = `Merhaba Emin, "${d.title}" çalışmanızı gördüm. Bizde de 
       <section class="case-cta" aria-labelledby="benzer">
         <h2 id="benzer">Benzer bir derdiniz mi var?</h2>
         <p class="muted">Bugün işin nasıl yapıldığını kısaca anlatın; nasıl kolaylaşabileceğini birlikte konuşalım.</p>
-        <ContactButton message={message} whatsappLabel="WhatsApp'tan yazın" emailLabel="E-postayla yazın" />
+        <ContactButton />
       </section>
     </div>
   </article>
@@ -212,7 +211,7 @@ const message = `Merhaba Emin, "${d.title}" çalışmanızı gördüm. Bizde de 
       margin-top: var(--space-4);
     }
     .shots figure { display: grid; gap: var(--space-2); }
-    .shots__link { display: block; border-radius: var(--radius-control); }
+    .shots__link { display: block; border-radius: var(--radius-control); cursor: zoom-in; }
     .shots img {
       width: 100%;
       border-radius: var(--radius-control);

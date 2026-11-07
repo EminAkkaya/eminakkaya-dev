@@ -7,14 +7,16 @@ interface Props {
   ratio?: string;
   eager?: boolean;
   sizes?: string;
+  width?: number;
+  height?: number;
 }
-const { src, alt, title, ratio = '16 / 10', eager = false } = Astro.props;
+const { src, alt, title, ratio = '16 / 10', eager = false, width = 1600, height = 1000 } = Astro.props;
 const initial = title.trim().charAt(0).toLocaleUpperCase('tr');
 ---
 
 <div class="media-frame" style={`aspect-ratio: ${ratio}`}>
   {src ? (
-    <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" width="1600" height="1000" />
+    <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" width={width} height={height} />
   ) : (
     <div class="media-frame__ph" role="img" aria-label={`${title}: görsel hazırlanıyor`}>
       <span aria-hidden="true">{initial}</span>

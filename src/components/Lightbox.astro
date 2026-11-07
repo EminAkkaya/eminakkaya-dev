@@ -1,0 +1,293 @@
+---
+// Sayfa içi görsel büyütme (lightbox): yerel <dialog> + bağımsız vanilla JS.
+// Kullanım: <a href="buyuk.webp" data-lightbox="galeri-adi"><img alt="..." /></a>
+// Aynı data-lightbox değerine sahip bağlantılar tek galeridir (önceki/sonraki).
+// JS kapalıysa bağlantı doğrudan büyük görsele gider (progressive enhancement). Videolar girmez.
+import Icon from './Icon.astro';
+interface Props { lang?: 'tr' | 'en' }
+const { lang = 'tr' } = Astro.props;
+const t = lang === 'en'
+  ? { dialog: 'Image viewer', close: 'Close', prev: 'Previous image', next: 'Next image' }
+  : { dialog: 'Görsel görüntüleyici', close: 'Kapat', prev: 'Önceki görsel', next: 'Sonraki görsel' };
+---
+
+<dialog class="lb" aria-label={t.dialog} data-lightbox-dialog>
+  <div class="lb__inner" data-lb-inner>
+    <button type="button" class="lb__btn lb__close" data-lb-close aria-label={t.close} title={t.close} autofocus>
+      <Icon name="x" size={22} />
+    </button>
+    <figure class="lb__figure" data-lb-stage>
+      <img class="lb__img" data-lb-img alt="" decoding="async" />
+      <figcaption class="lb__caption">
+        <span data-lb-caption></span>
+        <span class="lb__count" data-lb-count aria-live="polite"></span>
+      </figcaption>
+    </figure>
+    <button type="button" class="lb__btn lb__prev" data-lb-prev aria-label={t.prev} title={t.prev}>
+      <Icon name="chevron-left" size={24} />
+    </button>
+    <button type="button" class="lb__btn lb__next" data-lb-next aria-label={t.next} title={t.next}>
+      <Icon name="chevron-right" size={24} />
+    </button>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('a[data-lightbox]')];
+
+  if (dialog && typeof dialog.showModal === 'function' && links.length) {
+    const img = dialog.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    const caption = dialog.querySelector<HTMLElement>('[data-lb-caption]')!;
+    const count = dialog.querySelector<HTMLElement>('[data-lb-count]')!;
+    const inner = dialog.querySelector<HTMLElement>('[data-lb-inner]')!;
+    const prevBtn = dialog.querySelector<HTMLButtonElement>('[data-lb-prev]')!;
+    const nextBtn = dialog.querySelector<HTMLButtonElement>('[data-lb-next]')!;
+    const closeBtn = dialog.querySelector<HTMLButtonElement>('[data-lb-close]')!;
+
+    let group: HTMLAnchorElement[] = [];
+    let index = 0;
+    let trigger: HTMLAnchorElement | null = null;
+    let closing = false;
+    let closeTimer = 0;
+
+    const altOf = (a: HTMLAnchorElement) =>
+      a.dataset.caption ?? a.querySelector('img')?.getAttribute('alt') ?? '';
+
+    const show = (i: number) => {
+      index = (i + group.length) % group.length;
+      const a = group[index];
+      const alt = altOf(a);
+      img.classList.remove('is-ready');
+      img.onload = () => img.classList.add('is-ready');
+      img.src = a.href;
+      img.alt = alt;
+      if (img.complete) img.classList.add('is-ready');
+      caption.textContent = alt;
+      count.textContent = group.length > 1 ? `${index + 1} / ${group.length}` : '';
+      // Komşu görseli önceden yükle (geçiş beklemesin)
+      if (group.length > 1) new Image().src = group[(index + 1) % group.length].href;
+    };
+
+    const lockScroll = (on: boolean) => {
+      const root = document.documentElement;
+      if (on) {
+        const gap = window.innerWidth - root.clientWidth;
+        root.style.overflow = 'hidden';
+        if (gap > 0) root.style.paddingRight = `${gap}px`;
+      } else {
+        root.style.overflow = '';
+        root.style.paddingRight = '';
+      }
+    };
+
+    const open = (a: HTMLAnchorElement) => {
+      group = links.filter((l) => l.dataset.lightbox === a.dataset.lightbox);
+      trigger = a;
+      const multi = group.length > 1;
+      prevBtn.hidden = !multi;
+      nextBtn.hidden = !multi;
+      show(group.indexOf(a));
+      closing = false;
+      dialog.classList.remove('is-closing');
+      lockScroll(true);
+      dialog.showModal();
+      closeBtn.focus();
+    };
+
+    const finishClose = () => {
+      if (!dialog.open) return;
+      window.clearTimeout(closeTimer);
+      inner.removeEventListener('animationend', onAwayEnd);
+      dialog.classList.remove('is-closing');
+      dialog.close();
+      lockScroll(false);
+      closing = false;
+      trigger?.focus();
+    };
+
+    // Yarış koruması (§10): yalnız çıkış (-away) animasyonunun bitişi kapanışı tamamlar.
+    function onAwayEnd(e: AnimationEvent) {
+      if (e.target === inner && e.animationName.endsWith('-away')) finishClose();
+    }
+
+    const close = () => {
+      if (!dialog.open || closing) return;
+      closing = true;
+      inner.addEventListener('animationend', onAwayEnd);
+      dialog.classList.add('is-closing');
+      // Animasyon hiç başlamazsa (ör. sekme arka planda) yedek zamanlayıcı
+      closeTimer = window.setTimeout(finishClose, 400);
+    };
+
+    links.forEach((a) =>
+      a.addEventListener('click', (e) => {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        e.preventDefault();
+        open(a);
+      }),
+    );
+
+    prevBtn.addEventListener('click', () => show(index - 1));
+    nextBtn.addEventListener('click', () => show(index + 1));
+    closeBtn.addEventListener('click', close);
+
+    // Esc: yerel kapanış yerine animasyonlu kapanış
+    dialog.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      close();
+    });
+    // Tarayıcı dialog'u başka yoldan kapatırsa durumu toparla
+    dialog.addEventListener('close', () => {
+      window.clearTimeout(closeTimer);
+      dialog.classList.remove('is-closing');
+      lockScroll(false);
+      closing = false;
+      trigger?.focus();
+    });
+
+    dialog.addEventListener('keydown', (e) => {
+      if (group.length < 2) return;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
+      else if (e.key === 'ArrowRight') { e.preventDefault(); show(index + 1); }
+    });
+
+    // Zemine (görsel, altyazı ve butonlar dışına) tıklayınca kapan
+    dialog.addEventListener('click', (e) => {
+      const el = e.target as HTMLElement;
+      if (el.closest('.lb__img, .lb__caption, .lb__btn')) return;
+      close();
+    });
+
+    // Mobil kaydırma: yatay hareket 50px'i geçerse önceki/sonraki
+    let sx = 0;
+    let sy = 0;
+    let tracking = false;
+    dialog.addEventListener('touchstart', (e) => {
+      if (e.touches.length !== 1) { tracking = false; return; }
+      tracking = true;
+      sx = e.touches[0].clientX;
+      sy = e.touches[0].clientY;
+    }, { passive: true });
+    dialog.addEventListener('touchend', (e) => {
+      if (!tracking || group.length < 2) return;
+      tracking = false;
+      const dx = e.changedTouches[0].clientX - sx;
+      const dy = e.changedTouches[0].clientY - sy;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) show(dx < 0 ? index + 1 : index - 1);
+    }, { passive: true });
+  }
+</script>
+
+<style>
+  @layer blocks {
+    .lb {
+      /* Tam ekran şeffaf kutu; karartma ::backdrop'ta (opak, blur yok) */
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+    .lb::backdrop { background: var(--scrim); }
+    .lb[open]::backdrop { animation: lb-fade var(--duration-slow) var(--ease) both; }
+    .lb.is-closing::backdrop { animation: lb-fade-away var(--duration-base) var(--ease) both; }
+
+    .lb__inner {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      height: 100%;
+      padding: calc(var(--tap) + var(--space-4)) var(--space-3) var(--space-4);
+    }
+    /* Bağımsız <dialog>: ::backdrop fade + kutu fade+rise ayrı kutular (double-dip yok) */
+    .lb[open] .lb__inner { animation: lb-rise var(--duration-slow) var(--ease) both; }
+    .lb.is-closing .lb__inner { animation: lb-rise-away var(--duration-base) var(--ease) both; }
+
+    .lb__figure {
+      display: grid;
+      gap: var(--space-3);
+      justify-items: center;
+      max-width: min(1400px, 100%);
+      max-height: 100%;
+      min-height: 0;
+    }
+    .lb__img {
+      max-width: 100%;
+      max-height: calc(100dvh - 2 * var(--tap) - 7rem);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: var(--radius-control);
+      background: var(--bg-subtle);
+      opacity: 0;
+      transition: opacity var(--duration-base) var(--ease);
+      touch-action: pan-y pinch-zoom;
+    }
+    .lb__img.is-ready { opacity: 1; }
+    .lb__caption {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-1) var(--space-3);
+      max-width: var(--measure);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-control);
+      background: var(--bg-card);
+      color: var(--text);
+      font-size: var(--fs-sm);
+      text-align: center;
+    }
+    .lb__caption:empty { display: none; }
+    .lb__count { color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+    .lb__count:empty { display: none; }
+
+    .lb__btn {
+      position: absolute;
+      display: inline-grid;
+      place-items: center;
+      width: var(--tap);
+      height: var(--tap);
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      background: var(--bg-card);
+      color: var(--text);
+      cursor: pointer;
+      transition: transform var(--duration-fast) var(--ease);
+    }
+    .lb__btn[hidden] { display: none; }
+    .lb__btn:hover { background: var(--bg-hover); }
+    .lb__btn:active { transform: translateY(1px); }
+    .lb__close { top: var(--space-3); right: var(--space-3); }
+    .lb__prev, .lb__next { top: 50%; translate: 0 -50%; }
+    .lb__prev { left: var(--space-3); }
+    .lb__next { right: var(--space-3); }
+    @media (max-width: 767px) {
+      /* Dar ekranda oklar görselin altında köşelerde; kaydırma da çalışır */
+      .lb__prev, .lb__next { top: auto; bottom: var(--space-3); translate: none; }
+      .lb__inner { padding-bottom: calc(var(--tap) + var(--space-5)); }
+    }
+    @media (min-width: 768px) {
+      .lb__inner { padding-inline: calc(var(--tap) + var(--space-5)); }
+    }
+  }
+
+  @keyframes lb-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes lb-fade-away { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes lb-rise { from { opacity: 0; transform: translateY(8px) scale(0.985); } to { opacity: 1; transform: none; } }
+  @keyframes lb-rise-away { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateY(8px) scale(0.985); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lb[open]::backdrop, .lb.is-closing::backdrop,
+    .lb[open] .lb__inner, .lb.is-closing .lb__inner { animation-duration: 1ms; }
+    .lb__img { transition-duration: 1ms; }
+  }
+</style>

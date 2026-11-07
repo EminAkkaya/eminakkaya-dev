@@ -75,10 +75,14 @@
     --ease: cubic-bezier(0.2, 0, 0, 1);
 
     --tap: 44px;
+
+    /* Lightbox zemin karartması: opak, blur yok (§1) */
+    --scrim: rgba(20, 17, 15, 0.72);
   }
 
+  /* Koyu tema: sistem tercihi (kullanıcı "Açık" seçmediyse) */
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme='light']) {
       /* Espresso koyu tema */
       --bg: #14110F;
       --bg-card: #221C18;
@@ -109,6 +113,41 @@
 
       --shadow-card: none;
     }
+  }
+
+  /* Tema seçici (Header): data-theme sistem tercihini ezer. Değerler yukarıdakiyle aynı tutulur. */
+  :root[data-theme='light'] { color-scheme: light; }
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    /* Espresso koyu tema */
+    --bg: #14110F;
+    --bg-card: #221C18;
+    --bg-subtle: #1C1714;
+    --bg-hover: #2B2420;
+    --border: #3A322B;
+    --control-border: #6E665F;
+
+    --text: #EDE8E1;
+    --text-secondary: #A39990;
+    --text-muted: #958C83;  /* #8A8178 kartta 4.4:1 kalıyordu */
+
+    --accent: #83A894;
+    --accent-fg: #83A894;
+    --accent-interactive: #83A894;
+    --accent-interactive-hover: #A1BBA3;
+    --on-accent: #14110F;
+    --accent-subtle: #2B332C;
+
+    --success-fg: #86B37D;
+    --success-bg: #2B332C;
+    --warning-fg: #D4A94A;
+    --warning-bg: #352B1A;
+    --danger-fg: #D98770;
+    --danger-bg: #3A2A22;
+    --neutral-fg: #B8AEA4;
+    --neutral-bg: #2B2420;
+
+    --shadow-card: none;
   }
 
   @media (min-width: 768px) {

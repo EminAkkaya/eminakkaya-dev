@@ -25,6 +25,12 @@ import ChartNoAxesColumn from '@lucide/astro/icons/chart-no-axes-column';
 import Hammer from '@lucide/astro/icons/hammer';
 import Quote from '@lucide/astro/icons/quote';
 import Play from '@lucide/astro/icons/play';
+import Monitor from '@lucide/astro/icons/monitor';
+import Sun from '@lucide/astro/icons/sun';
+import Moon from '@lucide/astro/icons/moon';
+import X from '@lucide/astro/icons/x';
+import ChevronLeft from '@lucide/astro/icons/chevron-left';
+import ChevronRight from '@lucide/astro/icons/chevron-right';
 
 const icons = {
   'message-circle': MessageCircle,
@@ -52,6 +58,12 @@ const icons = {
   hammer: Hammer,
   quote: Quote,
   play: Play,
+  monitor: Monitor,
+  sun: Sun,
+  moon: Moon,
+  x: X,
+  'chevron-left': ChevronLeft,
+  'chevron-right': ChevronRight,
 } as const;
 
 export type IconName = keyof typeof icons;

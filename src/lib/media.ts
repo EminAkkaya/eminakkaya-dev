@@ -6,9 +6,18 @@ import path from 'node:path';
 const PUBLIC_DIR = path.resolve(process.cwd(), 'public');
 const MANIFEST = path.join(PUBLIC_DIR, 'media', 'manifest.json');
 
-export interface Shot { src: string; alt: string }
+export interface Shot { src: string; alt: string; w?: number; h?: number }
 export interface Demo { mp4?: string; webm?: string; poster?: string }
-export interface ProjectMedia { cover: string | null; shots: Shot[]; demo: Demo | null }
+/** Kart küçük görseli: kart için özel, okunaklı kırpım (manifest: projects.<slug>.thumb). */
+export interface Thumb { src: string; alt: string; w?: number; h?: number }
+export interface ProjectMedia {
+  cover: string | null;
+  coverAlt: string | null;
+  /** Kartlarda kullanılır; yoksa kartlar cover'a düşer. Vaka sayfası üst görseli cover kalır. */
+  thumb: Thumb | null;
+  shots: Shot[];
+  demo: Demo | null;
+}
 
 type AnyRecord = Record<string, unknown>;
 
@@ -41,7 +50,10 @@ function asShot(s: unknown, fallbackAlt: string): Shot | null {
     const o = s as AnyRecord;
     const src = resolveMedia(o.src ?? o.path ?? o.file);
     const alt = typeof o.alt === 'string' && o.alt.trim() ? o.alt : fallbackAlt;
-    return src ? { src, alt } : null;
+    if (!src) return null;
+    const shot: Shot = { src, alt };
+    if (typeof o.w === 'number' && typeof o.h === 'number') { shot.w = o.w; shot.h = o.h; }
+    return shot;
   }
   return null;
 }
@@ -76,6 +88,12 @@ export function projectMedia(slug: string, title: string, fm: FrontmatterMedia =
   const cover =
     resolveMedia(entry.cover) ?? resolveMedia(fm.cover) ?? resolveMedia(`${base}/cover.webp`);
 
+  const coverAlt =
+    typeof entry.coverAlt === 'string' && entry.coverAlt.trim() ? entry.coverAlt : null;
+
+  // thumb: manifest'te {src, alt, w, h} (ya da yalnız yol); yoksa sözleşmedeki thumb.webp.
+  const thumb = asShot(entry.thumb ?? `${base}/thumb.webp`, coverAlt ?? `${title} ekranından bir görünüm`);
+
   const shots: Shot[] = [];
   const seen = new Set<string>();
   const push = (s: Shot | null) => {
@@ -93,7 +111,7 @@ export function projectMedia(slug: string, title: string, fm: FrontmatterMedia =
     asDemo(fm.demo) ??
     asDemo({ mp4: `${base}/demo.mp4`, webm: `${base}/demo.webm`, poster: `${base}/demo-poster.webp` });
 
-  return { cover, shots, demo };
+  return { cover, coverAlt, thumb, shots, demo };
 }
 
 export interface GenImage { src: string; alt: string; width?: number; height?: number }
