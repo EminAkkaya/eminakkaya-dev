@@ -1,0 +1,295 @@
+{
+  "gen": [
+    {
+      "src": "/media/gen/og.webp",
+      "alt": "Dağınık mesaj balonlarından çıkan çizgilerin düzenli bir tabloya dönüştüğü sade çizim",
+      "w": 1200,
+      "h": 630
+    },
+    {
+      "src": "/media/gen/hero.webp",
+      "alt": "Masa üzerinde telefon, açık defter, kalem ve fatura kağıdından oluşan sade çizgi illüstrasyon",
+      "w": 1600,
+      "h": 893
+    },
+    {
+      "src": "/media/gen/hero-lg.webp",
+      "alt": "Masa üzerinde telefon, açık defter, kalem ve fatura kağıdından oluşan sade çizgi illüstrasyon",
+      "w": 2400,
+      "h": 1340
+    },
+    {
+      "src": "/media/gen/servis-whatsapp-otomasyon.webp",
+      "alt": "Üst üste mesaj balonları, sonuncusunda onay işareti: WhatsApp otomasyonu",
+      "w": 960,
+      "h": 720
+    },
+    {
+      "src": "/media/gen/servis-entegrasyon.webp",
+      "alt": "Tablo ile belge arasında çift yönlü oklar: sistem entegrasyonu",
+      "w": 960,
+      "h": 720
+    },
+    {
+      "src": "/media/gen/servis-ozel-arac.webp",
+      "alt": "Kenar menüsü, kartlar ve küçük çubuk grafikli uygulama penceresi: özel araç",
+      "w": 960,
+      "h": 720
+    },
+    {
+      "src": "/media/gen/servis-mobil.webp",
+      "alt": "Ekranında kartlar bulunan akıllı telefon: mobil uygulama",
+      "w": 960,
+      "h": 720
+    }
+  ],
+  "projects": {
+    "whatsapp-siparis": {
+      "cover": "/media/projects/whatsapp-siparis/cover.webp",
+      "coverAlt": "Sipariş otomasyonu paneli: WhatsApp'tan gelen örnek siparişler kart görünümünde, durum rozetleriyle listeleniyor",
+      "coverW": 1600,
+      "coverH": 1000,
+      "shots": [
+        {
+          "src": "/media/projects/whatsapp-siparis/shot-1.webp",
+          "alt": "Örnek konuşma: müşteri sipariş notunun fotoğrafını gönderiyor, uygulama 'Sipariş kaydedildi: 2 ürün' yanıtını veriyor (temsili, sahte veri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/whatsapp-siparis/shot-2.webp",
+          "alt": "Sipariş yönetimi tablosu: tarih, müşteri, ürün, ödeme tipi ve kayıt durumu sütunları; sahte örnek kayıtlar",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/whatsapp-siparis/shot-3.webp",
+          "alt": "Canlı durum ekranı: bağlantı aktif, anlık özet sayaçları ve sipariş işleme günlüğü",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/whatsapp-siparis/shot-4.webp",
+          "alt": "Sipariş yönetimi tablosunun koyu tema görünümü",
+          "w": 1440,
+          "h": 900
+        }
+      ],
+      "demo": {
+        "mp4": "/media/projects/whatsapp-siparis/demo.mp4",
+        "webm": "/media/projects/whatsapp-siparis/demo.webm",
+        "poster": "/media/projects/whatsapp-siparis/demo-poster.webp",
+        "alt": "Durum ekranından sipariş listesine geçiş, tablo ve kart görünümleri arasında gezinti (sahte veri)",
+        "w": 1280,
+        "h": 800,
+        "duration": 11.5,
+        "muted": true
+      },
+      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi."
+    },
+    "fatura-otomasyonu": {
+      "cover": "/media/projects/fatura-otomasyonu/cover.webp",
+      "coverAlt": "E-Arşiv fatura otomasyon paneli: tablodan okunan, kesilmeyi bekleyen örnek faturalar ve özet sayaçlar",
+      "coverW": 1600,
+      "coverH": 1000,
+      "shots": [
+        {
+          "src": "/media/projects/fatura-otomasyonu/shot-1.webp",
+          "alt": "Fatura paneli: toplam, bekleyen ve kesilen fatura sayaçları ile bekleyen faturalar tablosu (sahte veri)",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/fatura-otomasyonu/shot-2.webp",
+          "alt": "Bekleyen faturalar tablosunun yakın görünümü: ad, il, tarih, kalem, tutar ve ÖTV sütunları",
+          "w": 1600,
+          "h": 832
+        }
+      ],
+      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi."
+    },
+    "whatsagent": {
+      "cover": "/media/projects/whatsagent/cover.webp",
+      "coverAlt": "Örnek konuşma: WhatsApp'tan ERP asistanına cari bakiyesi soruluyor, asistan bakiye ve vade bilgisini yanıtlıyor (temsili)",
+      "coverW": 1600,
+      "coverH": 1000,
+      "shots": [
+        {
+          "src": "/media/projects/whatsagent/shot-1.webp",
+          "alt": "Örnek konuşma: cari bakiyesi ve son üç hareket WhatsApp üzerinden soruluyor ve tablo halinde yanıtlanıyor (temsili, sahte veri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/whatsagent/shot-2.webp",
+          "alt": "Örnek konuşma: stok sorgusu ve onaya bağlı sipariş taslağı; onay verilmeden ERP'ye kayıt yapılmıyor (temsili, sahte veri)",
+          "w": 1600,
+          "h": 1000
+        }
+      ],
+      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi."
+    },
+    "learncard": {
+      "cover": "/media/projects/learncard/cover.webp",
+      "coverAlt": "LearnCard ekranları: renkli kelimelerle okuyucu, dokunulan kelimenin sözlük sayfası ve kart tekrarı",
+      "coverW": 1600,
+      "coverH": 1000,
+      "shots": [
+        {
+          "src": "/media/projects/learncard/shot-1.webp",
+          "alt": "Okuyucu ve sözlük: metindeki kelimeler öğrenme durumuna göre renkleniyor, dokunulan kelimenin anlamı ve örnek cümlesi açılıyor",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/learncard/shot-2.webp",
+          "alt": "Kart tekrarı: kartın ön yüzü (kelime, okunuş, örnek cümle) ve arka yüzü (Türkçe çeviri, tanım, hatırlama düğmeleri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/learncard/shot-3.webp",
+          "alt": "Oyun merkezi, kelime eşleştirme oyunu ve günlük ilerleme istatistikleri",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/learncard/shot-4.webp",
+          "alt": "Koyu tema: okuyucu, sözlük sayfası ve kart tekrarı",
+          "w": 1600,
+          "h": 1000
+        }
+      ],
+      "demo": {
+        "mp4": "/media/projects/learncard/demo.mp4",
+        "webm": "/media/projects/learncard/demo.webm",
+        "poster": "/media/projects/learncard/demo-poster.webp",
+        "alt": "Metinde bir kelimeye dokunup sözlük sayfasından desteye ekleme, ardından kart tekrarına geçiş",
+        "w": 1280,
+        "h": 800,
+        "duration": 12.0,
+        "muted": true
+      }
+    },
+    "dncyedek": {
+      "cover": "/media/projects/dncyedek/cover.webp",
+      "coverAlt": "DncYedek yönetim paneli genel bakışı: bayi, müşteri ve depolama özetleri ile son doğrulanan yedekler (sahte veri)",
+      "coverW": 1600,
+      "coverH": 1000,
+      "shots": [
+        {
+          "src": "/media/projects/dncyedek/shot-1.webp",
+          "alt": "Müşteri yönetimi: bağlı bayi, kota kullanımı, lisans ve onay durumları (sahte veri)",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/dncyedek/shot-2.webp",
+          "alt": "Yedek arşivi: dosya adı, müşteri, boyut, SHA-256 özeti ve doğrulama durumu",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/dncyedek/shot-3.webp",
+          "alt": "Bayi paneli: bayiye bağlı müşteriler, lisans süreleri ve API anahtarı işlemleri",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/dncyedek/shot-4.webp",
+          "alt": "Yönetim panelinin koyu tema görünümü",
+          "w": 1440,
+          "h": 900
+        }
+      ],
+      "demo": {
+        "mp4": "/media/projects/dncyedek/demo.mp4",
+        "webm": "/media/projects/dncyedek/demo.webm",
+        "poster": "/media/projects/dncyedek/demo-poster.webp",
+        "alt": "Yönetim panelinde bayiler, müşteriler ve yedek arşivi sayfaları arasında gezinti, ardından koyu temaya geçiş",
+        "w": 1280,
+        "h": 800,
+        "duration": 14.2,
+        "muted": true
+      }
+    },
+    "webnot": {
+      "cover": "/media/projects/webnot/cover.webp",
+      "coverAlt": "Webnot ekip not panosu: çalışma alanları, etiketler ve renkli not kartları (sahte veri)",
+      "coverW": 1600,
+      "coverH": 1000,
+      "shots": [
+        {
+          "src": "/media/projects/webnot/shot-1.webp",
+          "alt": "Açık bir not: markdown biçimli adımlar ve alıntı, renk ve çalışma alanı seçimi",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/webnot/shot-2.webp",
+          "alt": "Koyu temada açık bir not: işaretlenebilir yapılacaklar listesi",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/webnot/shot-3.webp",
+          "alt": "Mobil görünüm: not kartları ve alt gezinme çubuğu",
+          "w": 1600,
+          "h": 1000
+        }
+      ],
+      "demo": {
+        "mp4": "/media/projects/webnot/demo.mp4",
+        "webm": "/media/projects/webnot/demo.webm",
+        "poster": "/media/projects/webnot/demo-poster.webp",
+        "alt": "Not panosunda bir notu açma, sabitlenen notlar görünümü ve koyu temaya geçiş",
+        "w": 1280,
+        "h": 800,
+        "duration": 12.0,
+        "muted": true
+      }
+    },
+    "kpss": {
+      "cover": "/media/projects/kpss/cover.webp",
+      "coverAlt": "KPSS coğrafya harita atölyesi: katmanlı Türkiye haritası ve seçilen öğenin bilgi kartı",
+      "coverW": 1600,
+      "coverH": 1000,
+      "shots": [
+        {
+          "src": "/media/projects/kpss/shot-1.webp",
+          "alt": "Harita: dağlar katmanı açık, seçilen bölgenin notu ve çıkmış sorulardaki sıklığı",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/kpss/shot-2.webp",
+          "alt": "Soru bankası: çoktan seçmeli soru, doğru cevap vurgusu ve açıklama",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/kpss/shot-3.webp",
+          "alt": "Çıkmış soru analizi: konu ve yıl bazında soru dağılımı tablosu",
+          "w": 1440,
+          "h": 900
+        },
+        {
+          "src": "/media/projects/kpss/shot-4.webp",
+          "alt": "Konu anlatımı: başlık listesi ve öne çıkan noktalar",
+          "w": 1440,
+          "h": 900
+        }
+      ],
+      "demo": {
+        "mp4": "/media/projects/kpss/demo.mp4",
+        "webm": "/media/projects/kpss/demo.webm",
+        "poster": "/media/projects/kpss/demo-poster.webp",
+        "alt": "Harita katmanlarını açıp öğe seçme, ardından soru bankasında bir soruyu cevaplama",
+        "w": 1280,
+        "h": 800,
+        "duration": 11.6,
+        "muted": true
+      }
+    }
+  }
+}
