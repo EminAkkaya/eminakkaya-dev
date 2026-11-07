@@ -1,0 +1,21 @@
+{
+  "name": "eminakkaya-dev",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource/inter": "5.3.0",
+    "@lucide/astro": "1.70.0",
+    "astro": "7.4.1"
+  }
+}

@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { EMAIL, GITHUB_URL } from '../config';
+
+const work = [
+  { slug: 'whatsapp-siparis', title: 'WhatsApp Order Automation', status: 'In use', text: 'Desktop app that reads order photos and messages posted to a boutique\'s WhatsApp group, turns them into structured orders with a vision LLM and stores them locally. Shipped 26 updates from field feedback (v1.3.26).', tech: 'Electron, Node.js, Baileys, GPT-4o / Gemini Vision, SQLite' },
+  { slug: 'fatura-otomasyonu', title: 'e-Archive Invoice Automation', status: 'Completed', text: 'Reads sales rows from a spreadsheet, issues each invoice on the Turkish e-Archive portal and writes the result back to the sheet, with retries per row.', tech: 'Python, Playwright, Streamlit, Google Sheets API' },
+  { slug: 'whatsagent', title: 'WhatsAgent', status: 'Pilot', text: 'WhatsApp assistant on top of ERP data: balances, statements, stock and daily revenue reports. Every write goes through a two-step approval; a rule engine answers when the LLM is unavailable. 544 automated tests.', tech: 'Electron, Node.js, SQLite, MSSQL ETL, LLM function calling' },
+  { slug: 'learncard', title: 'LearnCard', status: 'Preparing for app stores', text: 'My own mobile app: tap a word while reading English to create a flashcard, review with spaced repetition. Works offline with an embedded dictionary; own sync engine.', tech: 'Flutter, Riverpod, Drift, Supabase' },
+];
+---
+
+<Base
+  lang="en"
+  title="In English"
+  description="Muhammet Emin Akkaya automates the manual work of small businesses in Türkiye: WhatsApp orders, e-Archive invoicing, ERP reports. Computer Engineering senior, Sakarya."
+>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">English summary</p>
+      <h1>I automate the manual work of small businesses.</h1>
+      <div class="prose mt-5">
+        <p>
+          I'm Muhammet Emin Akkaya, a final-year Computer Engineering student based in Sakarya, Türkiye.
+          I build software that takes repetitive work off small businesses: orders that arrive on
+          WhatsApp, invoices typed into the e-Archive portal by hand, revenue figures buried in the ERP.
+          The main site is in Turkish; this page is a short summary.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="en-work">
+    <div class="container">
+      <h2 id="en-work" class="section-head">Selected work</h2>
+      <ul class="grid en-work" role="list" style="--grid-min: 280px">
+        {work.map((w) => (
+          <li class="card">
+            <p class="small muted">{w.status}</p>
+            <h3><a href={`/calismalar/${w.slug}`}>{w.title}</a> <span class="small muted">(case study in Turkish)</span></h3>
+            <p>{w.text}</p>
+            <p class="small muted">{w.tech}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-5 muted">Also: a multi-tenant backup server in Go (streaming uploads, SHA-256 verification, alerts), a team notes platform (PocketBase, web PWA, Flutter) and a static KPSS geography map workshop.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="en-contact">
+    <div class="container">
+      <h2 id="en-contact">Contact</h2>
+      <ul class="cluster mt-4" role="list">
+        <li><a class="btn" data-variant="primary" href={`mailto:${EMAIL}`}><Icon name="mail" size={18} />{EMAIL}</a></li>
+        <li><a class="btn" data-variant="ghost" href={GITHUB_URL} target="_blank" rel="me noopener"><Icon name="code-xml" size={18} />GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+      </ul>
+      {/* TODO(Emin): EN CV PDF hazır olunca buraya bağlantı ekle (ör. /cv/emin-akkaya-cv-en.pdf). */}
+    </div>
+  </section>
+</Base>
+
+<style>
+  @layer blocks {
+    .en-work { list-style: none; padding: 0; }
+    .en-work li > * + * { margin-top: var(--space-2); }
+    .en-work h3 { font-size: var(--fs-md); }
+    .en-work h3 a { color: var(--text); }
+    .btn { overflow-wrap: anywhere; }
+  }
+</style>

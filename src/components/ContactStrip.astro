@@ -1,0 +1,49 @@
+---
+import ContactButton from './ContactButton.astro';
+import { EMAIL, LOCATION } from '../config';
+
+interface Props { title?: string; text?: string; message?: string }
+const {
+  title = 'Elle yapılan bir işiniz mi var?',
+  text = 'Kısaca anlatın; yazılımla çözülüp çözülmeyeceğini dürüstçe söylerim. Ön görüşme ücretsiz.',
+  message,
+} = Astro.props;
+---
+
+<section class="strip" aria-labelledby="iletisim-seridi">
+  <div class="container">
+    <div class="strip__inner">
+      <div class="strip__text">
+        <h2 id="iletisim-seridi">{title}</h2>
+        <p class="muted">{text}</p>
+      </div>
+      <div class="strip__actions">
+        <ContactButton message={message} />
+        <p class="small muted">
+          ya da <a href={`mailto:${EMAIL}`}>{EMAIL}</a> · {LOCATION}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @layer blocks {
+    .strip { padding-block: var(--space-7) 0; }
+    .strip__inner {
+      display: grid;
+      gap: var(--space-5);
+      padding: var(--space-6) var(--space-5);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-card);
+    }
+    .strip__text > * + * { margin-top: var(--space-2); }
+    .strip__actions { display: grid; gap: var(--space-3); justify-items: start; }
+    .strip__actions p { overflow-wrap: anywhere; }
+    @media (min-width: 768px) {
+      .strip__inner { grid-template-columns: 1fr auto; align-items: center; padding: var(--space-6); }
+    }
+  }
+</style>

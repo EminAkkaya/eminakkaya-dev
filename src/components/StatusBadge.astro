@@ -1,0 +1,19 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props { status: string }
+const { status } = Astro.props;
+
+// Renk tek başına anlam taşımaz: zemin + ikon + metin (tasarım sistemi §2.3)
+const s = status.toLocaleLowerCase('tr');
+let tone: 'success' | 'warning' | 'accent' | 'neutral' = 'neutral';
+let icon: IconName = 'circle-check';
+if (s.includes('kullanımda')) { tone = 'success'; icon = 'circle-check'; }
+else if (s.includes('pilot')) { tone = 'warning'; icon = 'flask-conical'; }
+else if (s.includes('hazırlan') || s.includes('geliştiril')) { tone = 'accent'; icon = 'hourglass'; }
+---
+
+<span class="badge" data-tone={tone}>
+  <Icon name={icon} size={14} />
+  {status}
+</span>

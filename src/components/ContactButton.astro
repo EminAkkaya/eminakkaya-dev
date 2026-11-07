@@ -1,0 +1,23 @@
+---
+import { contactLink, DEFAULT_MESSAGE } from '../config';
+import Icon from './Icon.astro';
+
+interface Props {
+  message?: string;
+  variant?: 'primary' | 'ghost';
+  size?: 'md' | 'sm';
+  whatsappLabel?: string;
+  emailLabel?: string;
+}
+
+const { message = DEFAULT_MESSAGE, variant = 'primary', size = 'md', whatsappLabel, emailLabel } = Astro.props;
+// WHATSAPP_NUMBER boşsa bağlantı e-postaya düşer (bkz. src/config.ts).
+const link = contactLink(message, { whatsapp: whatsappLabel, email: emailLabel });
+const ext = link.external ? { target: '_blank', rel: 'noopener' } : {};
+---
+
+<a class="btn" data-variant={variant} data-size={size} href={link.href} {...ext}>
+  <Icon name={link.channel === 'whatsapp' ? 'message-circle' : 'mail'} size={18} />
+  <span>{link.label}</span>
+  {link.external && <span class="visually-hidden"> (yeni sekmede açılır)</span>}
+</a>

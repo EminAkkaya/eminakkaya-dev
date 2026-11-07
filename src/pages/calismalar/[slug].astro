@@ -1,0 +1,262 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ContactButton from '../../components/ContactButton.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import MediaFrame from '../../components/MediaFrame.astro';
+import DemoVideo from '../../components/DemoVideo.astro';
+import Icon from '../../components/Icon.astro';
+import { getProjects, type Project } from '../../lib/projects';
+import { projectMedia } from '../../lib/media';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.data.slug },
+    props: {
+      project,
+      prev: projects[i - 1] ?? null,
+      next: projects[i + 1] ?? null,
+    },
+  }));
+}
+
+interface Props { project: Project; prev: Project | null; next: Project | null }
+const { project, prev, next } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+const media = projectMedia(d.slug, d.title, d);
+const shots = media.shots;
+const message = `Merhaba Emin, "${d.title}" çalışmanızı gördüm. Bizde de benzer bir iş var, konuşabilir miyiz?`;
+---
+
+<Base title={d.title} description={`${d.headline}. ${d.summary}`} ogType="article">
+  <article>
+    <header class="section case-head">
+      <div class="container">
+        <nav aria-label="Konum" class="crumbs small">
+          <a href="/calismalar">Çalışmalar</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{d.title}</span>
+        </nav>
+        <h1 class="case-title">{d.headline}</h1>
+        <p class="lead measure mt-4">{d.summary}</p>
+
+        <dl class="facts">
+          <div><dt>Proje</dt><dd>{d.title}</dd></div>
+          <div><dt>Sektör</dt><dd>{d.sector}</dd></div>
+          {d.period && <div><dt>Süre</dt><dd>{d.period}</dd></div>}
+          <div><dt>Şu an</dt><dd><StatusBadge status={d.status} /></dd></div>
+        </dl>
+
+        {d.metrics.length > 0 && (
+          <ul class="metrics" role="list">
+            {d.metrics.map((m) => (
+              <li><span class="metrics__value">{m.value}</span><span class="metrics__label">{m.label}</span></li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </header>
+
+    <div class="container case-media">
+      {media.demo ? (
+        <DemoVideo demo={media.demo} label={`${d.title}: kısa ekran kaydı (sahte veriyle)`} />
+      ) : (
+        <MediaFrame src={media.cover} alt={`${d.title} ekranından bir görünüm`} title={d.title} eager />
+      )}
+    </div>
+
+    <div class="container case-body">
+      <div class="prose">
+        <Content />
+
+        {d.quote && (
+          <>
+            <h2>Müşteri ne diyor</h2>
+            <figure class="case-quote">
+              <blockquote><p>{d.quote.text}</p></blockquote>
+              <figcaption class="small muted">{d.quote.author}</figcaption>
+            </figure>
+          </>
+        )}
+      </div>
+
+      {shots.length > 0 && (
+        <section class="shots" aria-labelledby="ekranlar">
+          <h2 id="ekranlar">Ekranlar</h2>
+          <p class="small muted">Görüntüler sahte (örnek) veriyle hazırlandı.</p>
+          <div class="shots__grid">
+            {shots.map((s) => (
+              <figure>
+                <a href={s.src} class="shots__link">
+                  <img src={s.src} alt={s.alt} loading="lazy" decoding="async" />
+                </a>
+                <figcaption class="small muted">{s.alt}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {d.links.length > 0 && (
+        <ul class="cluster case-links" role="list">
+          {d.links.map((l) => (
+            <li>
+              <a class="btn" data-variant="ghost" href={l.href} target="_blank" rel="noopener">
+                {l.label} <Icon name="arrow-up-right" size={16} />
+                <span class="visually-hidden"> (yeni sekmede açılır)</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {(d.techDetails.length > 0 || d.tech.length > 0) && (
+        <details class="disclosure tech">
+          <summary>
+            <span>Teknik detaylar</span>
+            <Icon name="chevron-down" size={18} />
+          </summary>
+          <div class="disclosure__body">
+            {d.tech.length > 0 && (
+              <ul class="cluster tech__tags" role="list" aria-label="Kullanılan teknolojiler">
+                {d.tech.map((t) => <li class="tag">{t}</li>)}
+              </ul>
+            )}
+            {d.techDetails.length > 0 && (
+              <ul class="tech__list">
+                {d.techDetails.map((t) => <li>{t}</li>)}
+              </ul>
+            )}
+          </div>
+        </details>
+      )}
+
+      <section class="case-cta" aria-labelledby="benzer">
+        <h2 id="benzer">Benzer bir derdiniz mi var?</h2>
+        <p class="muted">Bugün işin nasıl yapıldığını kısaca anlatın; nasıl kolaylaşabileceğini birlikte konuşalım.</p>
+        <ContactButton message={message} whatsappLabel="WhatsApp'tan yazın" emailLabel="E-postayla yazın" />
+      </section>
+    </div>
+  </article>
+
+  <nav class="container pager" aria-label="Diğer çalışmalar">
+    {prev ? (
+      <a class="pager__link" href={`/calismalar/${prev.data.slug}`} rel="prev">
+        <span class="small muted"><Icon name="arrow-left" size={14} /> Önceki</span>
+        <span>{prev.data.title}</span>
+      </a>
+    ) : <span />}
+    {next ? (
+      <a class="pager__link pager__link--next" href={`/calismalar/${next.data.slug}`} rel="next">
+        <span class="small muted">Sonraki <Icon name="arrow-right" size={14} /></span>
+        <span>{next.data.title}</span>
+      </a>
+    ) : <span />}
+  </nav>
+</Base>
+
+<style>
+  @layer blocks {
+    .case-head { padding-bottom: var(--space-6); }
+    .crumbs { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; color: var(--text-secondary); margin-bottom: var(--space-4); }
+    .crumbs a { display: inline-flex; align-items: center; min-height: var(--tap); }
+    .case-title { font-size: var(--fs-hero); line-height: 1.12; max-width: 24ch; }
+
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+      padding: var(--space-5);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+    }
+    .facts dt {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-1);
+    }
+    .facts dd { font-weight: 500; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+      gap: var(--space-4);
+      list-style: none;
+      padding: 0;
+      margin-top: var(--space-4);
+    }
+    .metrics li { display: grid; gap: var(--space-1); }
+    .metrics__value { font-size: 1.625rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .metrics__label { font-size: var(--fs-sm); color: var(--text-secondary); }
+
+    .case-media { margin-bottom: var(--space-7); }
+    .case-media > * { max-width: 960px; }
+
+    .case-body { display: grid; gap: var(--space-7); }
+    .case-body .prose :global(h2:first-child) { margin-top: 0; }
+    .case-quote { border-inline-start: 3px solid var(--accent); padding-inline-start: var(--space-4); }
+    .case-quote blockquote { font-size: var(--fs-md); }
+
+    .shots > * + * { margin-top: var(--space-2); }
+    .shots__grid {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+      margin-top: var(--space-4);
+    }
+    .shots figure { display: grid; gap: var(--space-2); }
+    .shots__link { display: block; border-radius: var(--radius-control); }
+    .shots img {
+      width: 100%;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--border);
+      background: var(--bg-subtle);
+    }
+
+    .tech { max-width: var(--measure); }
+    .tech__tags { --cluster-space: var(--space-2); list-style: none; padding: 0; margin-bottom: var(--space-4); }
+    .tech__list { padding-inline-start: 1.15rem; display: grid; gap: var(--space-2); color: var(--text-secondary); }
+    .tech__list li::marker { color: var(--accent); }
+
+    .case-cta {
+      display: grid;
+      gap: var(--space-3);
+      justify-items: start;
+      padding: var(--space-6) var(--space-5);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      max-width: var(--measure);
+    }
+
+    .pager {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-4);
+      margin-top: var(--space-7);
+    }
+    .pager__link {
+      display: grid;
+      gap: var(--space-1);
+      min-height: var(--tap);
+      padding: var(--space-4);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      background: var(--bg-card);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .pager__link:hover { background: var(--bg-hover); color: var(--text); }
+    .pager__link .small { display: inline-flex; align-items: center; gap: var(--space-1); font-weight: 500; }
+    .pager__link--next { text-align: end; justify-items: end; }
+  }
+</style>

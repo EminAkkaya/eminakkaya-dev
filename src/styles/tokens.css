@@ -1,0 +1,125 @@
+/*
+ * Tasarım token'ları — Minimalist Tasarım Sistemi v1.1 (§2, §2.3).
+ * Ham hex değerleri YALNIZ bu dosyada bulunur; bileşenler var(--...) kullanır.
+ */
+@layer reset, tokens, base, compositions, blocks, utilities;
+
+@layer tokens {
+  :root {
+    color-scheme: light dark;
+
+    /* Açık tema (varsayılan) */
+    --bg: #FBFAF7;
+    --bg-card: #FFFFFF;
+    --bg-subtle: #F7F5F0;
+    --bg-hover: #F6F3EE;
+    --border: #E8E2D8;
+    --control-border: #8A8178;
+
+    --text: #2B2722;
+    --text-secondary: #706962;
+    --text-muted: #766F66;
+
+    --accent: #6B8A7A;              /* yalnız grafik/ikon */
+    --accent-fg: #486858;           /* adaçayı metin */
+    --accent-interactive: #4D6B5C;  /* buton dolgusu, bağlantı */
+    --accent-interactive-hover: #486858;
+    --on-accent: #FFFFFF;           /* buton üstü yazı (5.88:1) */
+    --accent-subtle: #EDF2EE;
+
+    --success-fg: #3B6B38;
+    --success-bg: #EDF2EE;
+    --warning-fg: #7D550A;
+    --warning-bg: #FAF3E0;
+    --danger-fg: #98432E;
+    --danger-bg: #F8ECE8;
+    --neutral-fg: #5E574F;
+    --neutral-bg: #F1EDE6;
+
+    --shadow-card: 0 4px 12px rgba(43, 39, 34, 0.04);
+
+    /* Tipografi */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --tracking-tight: -0.025em;
+    --tracking-wide: 0.04em;
+    --fs-xs: 0.8125rem;   /* 13px */
+    --fs-sm: 0.875rem;    /* 14px */
+    --fs-base: 1rem;      /* 16px */
+    --fs-md: 1.125rem;    /* 18px */
+    --fs-lg: 1.375rem;    /* 22px */
+    --fs-xl: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
+    --fs-hero: clamp(1.875rem, 1.35rem + 2.6vw, 3rem);
+
+    /* Biçim */
+    --radius-card: 12px;
+    --radius-control: 8px;
+    --radius-pill: 9999px;
+
+    /* Boşluk */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4.5rem;
+    --gutter: 16px;
+    --measure: 68ch;
+    --container: 1120px;
+
+    /* Hareket */
+    --duration-fast: 120ms;
+    --duration-base: 200ms;
+    --duration-slow: 320ms;
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+
+    --tap: 44px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Espresso koyu tema */
+      --bg: #14110F;
+      --bg-card: #221C18;
+      --bg-subtle: #1C1714;
+      --bg-hover: #2B2420;
+      --border: #3A322B;
+      --control-border: #6E665F;
+
+      --text: #EDE8E1;
+      --text-secondary: #A39990;
+      --text-muted: #958C83;  /* #8A8178 kartta 4.4:1 kalıyordu */
+
+      --accent: #83A894;
+      --accent-fg: #83A894;
+      --accent-interactive: #83A894;
+      --accent-interactive-hover: #A1BBA3;
+      --on-accent: #14110F;
+      --accent-subtle: #2B332C;
+
+      --success-fg: #86B37D;
+      --success-bg: #2B332C;
+      --warning-fg: #D4A94A;
+      --warning-bg: #352B1A;
+      --danger-fg: #D98770;
+      --danger-bg: #3A2A22;
+      --neutral-fg: #B8AEA4;
+      --neutral-bg: #2B2420;
+
+      --shadow-card: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    :root { --gutter: 32px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --duration-fast: 1ms;
+      --duration-base: 1ms;
+      --duration-slow: 1ms;
+    }
+  }
+}

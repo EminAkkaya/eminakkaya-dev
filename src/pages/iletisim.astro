@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactButton from '../components/ContactButton.astro';
+import Icon from '../components/Icon.astro';
+import { EMAIL, GITHUB_URL, LOCATION, WHATSAPP_NUMBER } from '../config';
+---
+
+<Base title="İletişim" description="WhatsApp ya da e-postayla yazın: iletisim@eminakkaya.dev. Sakarya ve uzaktan çalışıyorum; ön görüşme ücretsiz.">
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">İletişim</p>
+      <h1>Kısaca yazın, birlikte bakalım</h1>
+      <p class="lead measure mt-4">
+        Bugün elle yapılan işi iki üç cümleyle anlatmanız yeterli. Yazılımla çözülüp çözülmeyeceğini
+        dürüstçe söylerim; ön görüşme ücretsiz.
+      </p>
+      <div class="mt-5">
+        <ContactButton />
+      </div>
+
+      <ul class="channels grid mt-6" role="list" style="--grid-min: 240px">
+        {WHATSAPP_NUMBER && (
+          <li class="card channel">
+            <Icon name="message-circle" size={22} class="channel__icon" />
+            <h2>WhatsApp</h2>
+            <p class="muted">En hızlı yol. Hazır mesajla açılır; dilediğiniz gibi değiştirin.</p>
+          </li>
+        )}
+        <li class="card channel">
+          <Icon name="mail" size={22} class="channel__icon" />
+          <h2>E-posta</h2>
+          <p><a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+        </li>
+        <li class="card channel">
+          <Icon name="map-pin" size={22} class="channel__icon" />
+          <h2>Çalışma bölgesi</h2>
+          <p class="muted">{LOCATION}. Kurulum için gerekirse işletmenize gelirim.</p>
+        </li>
+        <li class="card channel">
+          <Icon name="code-xml" size={22} class="channel__icon" />
+          <h2>GitHub</h2>
+          <p><a href={GITHUB_URL} target="_blank" rel="me noopener">github.com/EminAkkaya<span class="visually-hidden"> (yeni sekmede açılır)</span></a></p>
+        </li>
+      </ul>
+
+      <div class="card mt-6 measure">
+        <h2 class="small-h">Yazarken şunları söylerseniz işimiz kolaylaşır</h2>
+        <ul class="hints">
+          <li>Hangi iş elle yapılıyor ve kim yapıyor?</li>
+          <li>Günde ya da ayda kaç kez tekrarlanıyor?</li>
+          <li>Hangi programları kullanıyorsunuz? (Excel, ERP, e-Arşiv portalı, WhatsApp Business…)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  @layer blocks {
+    .channels { list-style: none; padding: 0; }
+    .channel > * + * { margin-top: var(--space-2); }
+    .channel h2 { font-size: var(--fs-base); }
+    .channel a { overflow-wrap: anywhere; display: inline-flex; align-items: center; min-height: var(--tap); }
+    .channels :global(.channel__icon) { color: var(--accent-fg); }
+    .small-h { font-size: var(--fs-base); margin-bottom: var(--space-3); }
+    .hints { padding-inline-start: 1.15rem; display: grid; gap: var(--space-2); color: var(--text-secondary); }
+    .hints li::marker { color: var(--accent); }
+  }
+</style>

@@ -1,0 +1,257 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactButton from '../components/ContactButton.astro';
+import ContactStrip from '../components/ContactStrip.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Icon from '../components/Icon.astro';
+import { getProjects } from '../lib/projects';
+import { pains, steps, testimonials } from '../data/home';
+import { genImage } from '../lib/media';
+
+const hero = genImage('hero.webp', 'Masa üzerinde telefon, defter ve fatura çizimi');
+const heroLg = genImage('hero-lg.webp');
+
+const projects = await getProjects();
+const vitrin = projects.filter((p) => p.data.kind === 'vitrin');
+const urun = projects.filter((p) => p.data.kind === 'urun');
+const diger = projects.filter((p) => p.data.kind === 'diger');
+---
+
+<Base description="İşletmenizdeki elle yapılan işleri otomatikleştiriyorum: WhatsApp siparişleri, e-Arşiv fatura kesme, ERP raporları. Sakarya ve uzaktan, ücretsiz ön görüşme.">
+  <section class="hero">
+    <div class="container hero__inner">
+      <p class="eyebrow">Emin Akkaya · İşletmeler için yazılım</p>
+      <h1 class="hero__title">
+        İşletmenizdeki elle yapılan işleri otomatikleştiriyorum: WhatsApp siparişleri, fatura kesme, ERP raporları.
+      </h1>
+      <p class="hero__proof">
+        <Icon name="circle-check" size={18} />
+        <span>Şu an bir butiğin siparişleri bu sistemle kendiliğinden kayda geçiyor.</span>
+      </p>
+      <div class="cluster hero__actions">
+        <ContactButton />
+        <a class="btn" data-variant="ghost" href="#calismalar">Çalışmalarım</a>
+      </div>
+      {hero && (
+        <img
+          class="hero__art"
+          src={hero.src}
+          srcset={heroLg ? `${hero.src} ${hero.width ?? 1600}w, ${heroLg.src} ${heroLg.width ?? 2400}w` : undefined}
+          sizes="(min-width: 1184px) 1120px, 92vw"
+          alt={hero.alt}
+          width={hero.width ?? 1600}
+          height={hero.height ?? 893}
+          fetchpriority="high"
+          decoding="async"
+        />
+      )}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="dertler">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="dertler">Bunlardan biri tanıdık mı?</h2>
+        <p class="muted">Her biri için çalışan bir çözüm geliştirdim.</p>
+      </div>
+      <ul class="pains" role="list">
+        {pains.map((p) => (
+          <li class="pain">
+            <span class="pain__icon"><Icon name={p.icon} size={22} /></span>
+            <div>
+              <h3 class="pain__title">{p.title}</h3>
+              <p class="muted">{p.text}</p>
+              {p.href && <a class="pain__link" href={p.href}>Nasıl çözdüm<span class="visually-hidden">: {p.title}</span></a>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="calismalar" aria-labelledby="calismalar-baslik">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Çalışmalar</p>
+        <h2 id="calismalar-baslik">İşletmeler için yaptıklarım</h2>
+      </div>
+      <div class="grid" style="--grid-min: 300px">
+        {vitrin.map((p) => <ProjectCard project={p} />)}
+      </div>
+
+      {urun.length > 0 && (
+        <>
+          <div class="section-head mt-6">
+            <h2 class="sub-title">Kendi ürünlerim</h2>
+            <p class="muted">Müşteri işi değil; bir uygulamayı mağazaya kadar götürebildiğimin kanıtı.</p>
+          </div>
+          <div class="grid" style="--grid-min: 300px">
+            {urun.map((p) => <ProjectCard project={p} size="wide" />)}
+          </div>
+        </>
+      )}
+
+      {diger.length > 0 && (
+        <>
+          <div class="section-head mt-6">
+            <h2 class="sub-title">Diğer işler</h2>
+          </div>
+          <div class="grid" style="--grid-min: 240px">
+            {diger.map((p) => <ProjectCard project={p} size="sm" />)}
+          </div>
+        </>
+      )}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="nasil">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="nasil">Nasıl çalışıyorum</h2>
+        <p class="muted">Büyük bir projeye baştan bağlanmazsınız; önce küçük bir parçanın işe yaradığını görürsünüz.</p>
+      </div>
+      <ol class="steps" role="list">
+        {steps.map((s, i) => (
+          <li class="step">
+            <span class="step__num" aria-hidden="true">{i + 1}</span>
+            <h3 class="step__title"><span class="visually-hidden">Adım {i + 1}: </span>{s.title}</h3>
+            <p class="muted">{s.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-5"><a class="btn" data-variant="ghost" href="/hizmetler">Hizmetler ve fiyatlandırma</a></p>
+    </div>
+  </section>
+
+  {testimonials.length > 0 && (
+    <section class="section" aria-labelledby="yorumlar">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="yorumlar">Müşteriler ne diyor</h2>
+        </div>
+        <div class="grid" style="--grid-min: 300px">
+          {testimonials.map((t) => (
+            <figure class="card quote">
+              <Icon name="quote" size={22} class="quote__icon" />
+              <blockquote><p>{t.text}</p></blockquote>
+              <figcaption class="small muted">
+                {t.author}{t.role && `, ${t.role}`}
+                {t.project && <> · <a href={`/calismalar/${t.project}`}>çalışmayı gör</a></>}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <ContactStrip />
+</Base>
+
+<style>
+  @layer blocks {
+    .hero { padding-block: var(--space-7) var(--space-7); }
+    @media (min-width: 768px) { .hero { padding-block: var(--space-8); } }
+    .hero__inner > * + * { margin-top: var(--space-4); }
+    .hero__title {
+      font-size: var(--fs-hero);
+      font-weight: 700;
+      line-height: 1.12;
+      max-width: 22ch;
+    }
+    @media (min-width: 768px) { .hero__title { max-width: 26ch; } }
+    .hero__proof {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-2);
+      color: var(--text-secondary);
+      font-size: var(--fs-md);
+      max-width: var(--measure);
+    }
+    .hero__proof svg { color: var(--success-fg); margin-top: 0.25em; flex: none; }
+    .hero__actions { padding-top: var(--space-3); }
+    .hero__art {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 7;
+      object-fit: cover;
+      margin-top: var(--space-6);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border);
+    }
+    @media (prefers-color-scheme: dark) { .hero__art { opacity: 0.88; } }
+
+    .sub-title { font-size: var(--fs-md); }
+
+    .pains {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+      list-style: none;
+      padding: 0;
+    }
+    .pain {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-5);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+    .pain > div > * + * { margin-top: var(--space-2); }
+    .pain__icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-control);
+      background: var(--accent-subtle);
+      color: var(--accent-fg);
+    }
+    .pain__title { font-size: var(--fs-base); }
+    .pain__link {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+    }
+
+    .steps {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+      list-style: none;
+      padding: 0;
+    }
+    .step {
+      padding: var(--space-5);
+      border-top: 2px solid var(--accent);
+      background: var(--bg-card);
+      border-radius: 0 0 var(--radius-card) var(--radius-card);
+      border-inline: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .step > * + * { margin-top: var(--space-2); }
+    .step__num {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-subtle);
+      color: var(--accent-fg);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .step__title { font-size: var(--fs-base); }
+
+    .quote { display: grid; gap: var(--space-3); }
+    .quote :global(.quote__icon) { color: var(--accent); }
+    .quote blockquote { font-size: var(--fs-md); }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import type { Demo } from '../lib/media';
+interface Props { demo: Demo; label: string }
+const { demo, label } = Astro.props;
+---
+
+<figure class="demo">
+  <video
+    class="demo__video"
+    muted
+    loop
+    playsinline
+    controls
+    preload="none"
+    poster={demo.poster}
+    aria-label={label}
+    data-autoplay
+  >
+    {demo.webm && <source src={demo.webm} type="video/webm" />}
+    {demo.mp4 && <source src={demo.mp4} type="video/mp4" />}
+  </video>
+  <figcaption class="small muted">{label}</figcaption>
+</figure>
+
+<script>
+  // Hareket azaltma tercihi yoksa, görünür olduğunda sessizce oynat.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!reduce.matches && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      }
+    }, { threshold: 0.4 });
+    document.querySelectorAll<HTMLVideoElement>('video[data-autoplay]').forEach((v) => io.observe(v));
+  }
+</script>
+
+<style>
+  @layer blocks {
+    .demo { display: grid; gap: var(--space-2); }
+    .demo__video {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-control);
+      object-fit: contain;
+    }
+  }
+</style>

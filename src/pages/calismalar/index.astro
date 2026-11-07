@@ -1,0 +1,38 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import ContactStrip from '../../components/ContactStrip.astro';
+import { getProjects } from '../../lib/projects';
+
+const projects = await getProjects();
+const groups = [
+  { title: 'İşletmeler için yaptıklarım', items: projects.filter((p) => p.data.kind === 'vitrin'), size: 'lg' as const },
+  { title: 'Kendi ürünlerim', items: projects.filter((p) => p.data.kind === 'urun'), size: 'wide' as const },
+  { title: 'Diğer işler', items: projects.filter((p) => p.data.kind === 'diger'), size: 'sm' as const },
+];
+---
+
+<Base title="Çalışmalar" description="WhatsApp sipariş otomasyonu, e-Arşiv fatura otomasyonu, WhatsApp ERP asistanı ve diğer işler: her birinde dert, çözüm ve sonuç.">
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Çalışmalar</p>
+      <h1>Yaptığım işler</h1>
+      <p class="lead measure mt-4">Her çalışmada önce derdi, sonra ne yaptığımı ve neyin değiştiğini anlatıyorum. Teknik ayrıntılar sayfanın sonunda.</p>
+      {groups.filter((g) => g.items.length).map((g) => (
+        <>
+          <h2 class="group-title">{g.title}</h2>
+          <div class="grid" style={`--grid-min: ${g.size === 'sm' ? 240 : 300}px`}>
+            {g.items.map((p) => <ProjectCard project={p} size={g.size} />)}
+          </div>
+        </>
+      ))}
+    </div>
+  </section>
+  <ContactStrip />
+</Base>
+
+<style>
+  @layer blocks {
+    .group-title { font-size: var(--fs-md); margin: var(--space-7) 0 var(--space-4); }
+  }
+</style>

@@ -1,0 +1,87 @@
+---
+import type { Project } from '../lib/projects';
+import { projectMedia } from '../lib/media';
+import MediaFrame from './MediaFrame.astro';
+import StatusBadge from './StatusBadge.astro';
+import Icon from './Icon.astro';
+
+interface Props { project: Project; size?: 'lg' | 'sm' | 'wide'; headingLevel?: 'h3' | 'h2' }
+const { project, size = 'lg', headingLevel = 'h3' } = Astro.props;
+const d = project.data;
+const media = projectMedia(d.slug, d.title, d);
+const href = `/calismalar/${d.slug}`;
+const H = headingLevel;
+const big = size !== 'sm';
+const coverAlt = `${d.title} ekranından bir görünüm`;
+---
+
+<article class="pcard" data-size={size}>
+  {big && <MediaFrame src={media.cover} alt={coverAlt} title={d.title} />}
+  <div class="pcard__body">
+    <div class="cluster pcard__meta">
+      <StatusBadge status={d.status} />
+      <span class="small muted">{d.sector}</span>
+    </div>
+    <H class="pcard__title">
+      <a href={href} class="pcard__link">{big ? d.headline : d.title}</a>
+    </H>
+    <p class="pcard__summary">{big ? d.summary : d.headline}</p>
+    <span class="pcard__more" aria-hidden="true">
+      {big ? d.title : 'İncele'}
+      <Icon name="arrow-right" size={16} />
+    </span>
+  </div>
+</article>
+
+<style>
+  @layer blocks {
+    .pcard {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: var(--space-3);
+      transition: transform var(--duration-base) var(--ease);
+    }
+    .pcard:hover { transform: translateY(-2px); }
+    .pcard:has(.pcard__link:focus-visible) { outline: 2px solid var(--accent-interactive); outline-offset: 3px; }
+    .pcard__body {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding: var(--space-2) var(--space-3) var(--space-3);
+      flex: 1;
+    }
+    @media (min-width: 768px) {
+      .pcard[data-size='wide'] {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+      }
+      .pcard[data-size='wide'] .pcard__body { padding: var(--space-5); }
+    }
+    .pcard[data-size='sm'] .pcard__body { padding: var(--space-3); }
+    .pcard__meta { --cluster-space: var(--space-2) var(--space-3); }
+    .pcard__title { font-size: var(--fs-md); }
+    .pcard__link { color: var(--text); text-decoration: none; }
+    .pcard__link:hover { color: var(--text); }
+    .pcard__link:focus-visible { outline: none; }
+    /* Kartın tamamı tıklanabilir, bağlantı tek */
+    .pcard__link::after { content: ''; position: absolute; inset: 0; border-radius: var(--radius-card); }
+    .pcard__summary { color: var(--text-secondary); }
+    .pcard__more {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--accent-interactive);
+    }
+  }
+</style>

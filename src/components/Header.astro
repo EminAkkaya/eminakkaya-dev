@@ -1,0 +1,120 @@
+---
+import ContactButton from './ContactButton.astro';
+
+interface Props { lang?: 'tr' | 'en' }
+const { lang = 'tr' } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+
+const nav = lang === 'en'
+  ? [
+      { href: '/', label: 'Türkçe' },
+    ]
+  : [
+      { href: '/hizmetler', label: 'Hizmetler' },
+      { href: '/calismalar', label: 'Çalışmalar' },
+      { href: '/hakkimda', label: 'Hakkımda' },
+      { href: '/iletisim', label: 'İletişim' },
+    ];
+const isActive = (href: string) => href !== '/' && (path === href || path.startsWith(href + '/'));
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href={lang === 'en' ? '/en' : '/'} aria-label={lang === 'en' ? 'Emin Akkaya, home' : 'Emin Akkaya, ana sayfa'}>
+      <span class="brand__mark" aria-hidden="true">EA</span>
+      <span class="brand__name">Emin Akkaya</span>
+    </a>
+    <nav class="site-nav" aria-label={lang === 'en' ? 'Main' : 'Ana menü'}>
+      <ul>
+        {nav.map((item) => (
+          <li>
+            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined} lang={lang === 'en' ? 'tr' : undefined}>
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    {lang === 'tr' && (
+      <div class="site-header__cta">
+        <ContactButton size="sm" />
+      </div>
+    )}
+  </div>
+</header>
+
+<style>
+  @layer blocks {
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .site-header__inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      column-gap: var(--space-5);
+      row-gap: 0;
+      padding-block: var(--space-2);
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-height: var(--tap);
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: var(--tracking-tight);
+    }
+    .brand:hover { color: var(--text); }
+    .brand__mark {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-control);
+      background: var(--accent-interactive);
+      color: var(--on-accent);
+      font-size: var(--fs-xs);
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .site-nav { order: 3; flex-basis: 100%; }
+    .site-nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 var(--space-1);
+      list-style: none;
+      padding: 0;
+      margin-inline: calc(-1 * var(--space-2));
+    }
+    .site-nav a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+      padding-inline: var(--space-2);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      border-radius: var(--radius-control);
+    }
+    .site-nav a:hover { color: var(--text); background: var(--bg-hover); }
+    .site-nav a[aria-current='page'] {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--accent);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.45em;
+    }
+    .site-header__cta { display: none; }
+
+    @media (min-width: 860px) {
+      .site-nav { order: 0; flex-basis: auto; margin-inline-start: auto; }
+      .site-nav a { font-size: var(--fs-base); padding-inline: var(--space-3); }
+      .site-header__cta { display: block; }
+    }
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactStrip from '../components/ContactStrip.astro';
+import Icon from '../components/Icon.astro';
+import { GITHUB_URL } from '../config';
+
+const principles = [
+  {
+    icon: 'shield-check' as const,
+    title: 'Riskleri baştan söylerim',
+    text: 'Bir çözümün zayıf yanı varsa (ör. WhatsApp\'ın resmî olmayan bağlantısı, dış sistemlere bağımlılık) bunu teklif aşamasında yazılı olarak söylerim.',
+  },
+  {
+    icon: 'database-backup' as const,
+    title: 'Verinizi korurum',
+    text: 'Kurduğum sistemler veriyi sizin bilgisayarınızda ya da hesabınızda tutar. Sitedeki ekran görüntülerinde gerçek müşteri verisi yok.',
+  },
+  {
+    icon: 'wrench' as const,
+    title: 'İşi bitirip bırakmam',
+    text: 'WhatsApp Sipariş Otomasyonu kurulduktan sonra işletmeden gelen geri bildirimlerle 26 kez güncellendi. Otomasyon sahada yaşar; ben de yanında olurum.',
+  },
+];
+---
+
+<Base title="Hakkımda" description="Muhammet Emin Akkaya: Sakarya'da, işletmelerin WhatsApp, Excel ve ERP üzerinden yürüyen işlerini otomatikleştiren yazılımcı. Bilgisayar Mühendisliği son sınıf.">
+  <section class="section">
+    <div class="container about">
+      <div class="about__text">
+        <p class="eyebrow">Hakkımda</p>
+        <h1>Merhaba, ben Emin.</h1>
+        <div class="prose mt-5">
+          <p>
+            Adım Muhammet Emin Akkaya. Sakarya'dayım ve Bilgisayar Mühendisliği son sınıf
+            öğrencisiyim. Okulun yanında, küçük ve orta ölçekli işletmelerin her gün elle yaptığı
+            işleri yazılıma devrediyorum.
+          </p>
+          <p>
+            Bu işe bir butiğin sipariş derdiyle başladım: WhatsApp grubuna düşen siparişler her gün
+            elle bir yere yazılıyordu. O iş için yazdığım uygulama bugün hâlâ kullanılıyor ve
+            sahadan gelen her geri bildirimle güncelleniyor. Sonra aynı soruyu başka işlere de
+            sordum: e-Arşiv faturası, ERP raporu, yedekleme. Ortak çizgi hep aynı; işletme sahibinin
+            vaktini alan tekrar eden işler.
+          </p>
+          <p>
+            Her şeyi yaparım demiyorum. Uzmanlık alanım belli: <strong>WhatsApp, Excel ve ERP
+            üzerinden yürüyen işleri otomatikleştirmek</strong>. Bunun yanında kendi mobil
+            uygulamamı (LearnCard) mağazaya hazırlıyorum; mobil uygulama isteyen işletmeler için
+            referansım o.
+          </p>
+          <h2>Nasıl çalışıyorum</h2>
+          <p>
+            İşe önce dinleyerek başlarım: bugün iş nasıl yapılıyor, nerede zaman kaybediliyor.
+            Sonra küçük bir denemeyle başlarım; büyük bir projeye baştan bağlanmazsınız.
+          </p>
+          <p>
+            Geliştirirken yapay zekâ araçlarını planlı ve testli bir düzen içinde kullanıyorum:
+            her işin yazılı bir planı, kararların kaydı ve otomatik testleri olur. Bu sayede tek
+            kişi olarak hızlı ama kontrollü ilerleyebiliyorum; örneğin WhatsAgent 544 otomatik
+            testle korunuyor.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="ilkeler">
+    <div class="container">
+      <div class="section-head"><h2 id="ilkeler">Çalışma ilkelerim</h2></div>
+      <ul class="grid principles" role="list" style="--grid-min: 260px">
+        {principles.map((p) => (
+          <li class="card">
+            <Icon name={p.icon} size={22} class="principle__icon" />
+            <h3>{p.title}</h3>
+            <p class="muted">{p.text}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 muted">
+        Kodlarımın bir kısmı <a href={GITHUB_URL} target="_blank" rel="me noopener">GitHub'da<span class="visually-hidden"> (yeni sekmede açılır)</span></a>.
+        Müşteri işlerinin kodu, müşteri verisi içerdiği için paylaşılmaz.
+      </p>
+    </div>
+  </section>
+
+  <ContactStrip />
+</Base>
+
+<style>
+  @layer blocks {
+    .principles { list-style: none; padding: 0; }
+    .principles li > * + * { margin-top: var(--space-2); }
+    .principles :global(.principle__icon) { color: var(--accent-fg); }
+    .principles h3 { font-size: var(--fs-base); }
+  }
+</style>

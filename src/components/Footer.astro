@@ -1,0 +1,55 @@
+---
+import { EMAIL, GITHUB_URL, LOCATION } from '../config';
+interface Props { lang?: 'tr' | 'en' }
+const { lang = 'tr' } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__who">
+      <p><strong>Muhammet Emin Akkaya</strong></p>
+      <p class="muted small">
+        {lang === 'en' ? 'Software for small businesses · Sakarya, Türkiye and remote' : `İşletmeler için yazılım · ${LOCATION}`}
+      </p>
+    </div>
+    <ul class="site-footer__links">
+      <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+      <li><a href={GITHUB_URL} rel="me noopener" target="_blank">GitHub<span class="visually-hidden"> (yeni sekmede açılır)</span></a></li>
+      {lang === 'tr' ? <li><a href="/en" hreflang="en" lang="en">English</a></li> : <li><a href="/" hreflang="tr" lang="tr">Türkçe</a></li>}
+    </ul>
+    <p class="muted small site-footer__note">
+      {lang === 'en'
+        ? `© ${year} · No cookies, no tracking.`
+        : `© ${year} · Bu sitede çerez ve izleme yok.`}
+    </p>
+  </div>
+</footer>
+
+<style>
+  @layer blocks {
+    .site-footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg-subtle);
+      padding-block: var(--space-6);
+      margin-top: var(--space-7);
+    }
+    .site-footer__inner { display: grid; gap: var(--space-4); }
+    .site-footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0 var(--space-4);
+      list-style: none;
+      padding: 0;
+    }
+    .site-footer__links a {
+      display: inline-flex;
+      align-items: center;
+      min-height: var(--tap);
+    }
+    @media (min-width: 768px) {
+      .site-footer__inner { grid-template-columns: 1fr auto; align-items: center; }
+      .site-footer__note { grid-column: 1 / -1; }
+    }
+  }
+</style>

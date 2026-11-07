@@ -1,0 +1,158 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactStrip from '../components/ContactStrip.astro';
+import Icon from '../components/Icon.astro';
+import { services, honesty } from '../data/services';
+import { genImage } from '../lib/media';
+
+const art: Record<string, string> = {
+  whatsapp: 'servis-whatsapp-otomasyon.webp',
+  entegrasyon: 'servis-entegrasyon.webp',
+  arac: 'servis-ozel-arac.webp',
+  mobil: 'servis-mobil.webp',
+};
+const images = Object.fromEntries(services.map((s) => [s.id, genImage(art[s.id] ?? '', '')]));
+---
+
+<Base
+  title="Hizmetler"
+  description="WhatsApp otomasyonu, Excel / e-Arşiv / ERP entegrasyonu, işletmeye özel masaüstü ve web araçları, mobil uygulama. İşe göre teklif, ücretsiz ön görüşme."
+>
+  <section class="section page-head">
+    <div class="container">
+      <p class="eyebrow">Hizmetler</p>
+      <h1>Ne yapabilirim?</h1>
+      <p class="lead measure mt-4">
+        Dört başlıkta çalışıyorum. Hepsinin ortak noktası: bugün işletmenizde elle yapılan, tekrar
+        eden bir işi yazılıma devretmek. Fiyat işe göre belirlenir; ön görüşme ücretsizdir.
+      </p>
+      <nav aria-label="Hizmetler" class="mt-5">
+        <ul class="cluster toc" role="list">
+          {services.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+  </section>
+
+  <section class="section" aria-label="Hizmet listesi">
+    <div class="container services">
+      {services.map((s) => (
+        <article class="card service" id={s.id} aria-labelledby={`${s.id}-t`}>
+          {images[s.id] && (
+            <img class="service__art" src={images[s.id]!.src} alt="" width="960" height="720" loading="lazy" decoding="async" />
+          )}
+          <header class="service__head">
+            <span class="service__icon"><Icon name={s.icon} size={22} /></span>
+            <h2 id={`${s.id}-t`}>{s.title}</h2>
+          </header>
+          <dl class="service__list">
+            <div>
+              <dt>Hangi dert</dt>
+              <dd>{s.pain}</dd>
+            </div>
+            <div>
+              <dt>Ne teslim edilir</dt>
+              <dd>
+                <ul>{s.deliver.map((d) => <li>{d}</li>)}</ul>
+              </dd>
+            </div>
+            <div>
+              <dt>Ne kadar sürer</dt>
+              <dd>{s.duration}</dd>
+            </div>
+            <div>
+              <dt>Fiyat nasıl belirlenir</dt>
+              <dd>{s.price}</dd>
+            </div>
+          </dl>
+          {s.example && (
+            <a class="service__example" href={s.example.href}>
+              {s.example.label}
+              <Icon name="arrow-right" size={16} />
+            </a>
+          )}
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="dogrular">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="dogrular">Baştan söylediklerim</h2>
+        <p class="muted">Teklif vermeden önce her müşteriye söylediğim şeyler. Sonradan sürpriz olmasın.</p>
+      </div>
+      <ul class="honesty" role="list">
+        {honesty.map((h) => (
+          <li class="honesty__item">
+            <Icon name="shield-check" size={20} />
+            <div>
+              <h3>{h.title}</h3>
+              <p class="muted">{h.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <ContactStrip title="Hangisi size uyuyor?" text="Bilmiyorsanız sorun değil. Derdinizi anlatın, hangi yolun mantıklı olduğunu birlikte bulalım." />
+</Base>
+
+<style>
+  @layer blocks {
+    .page-head { padding-bottom: var(--space-6); }
+    .toc { --cluster-space: var(--space-1) var(--space-4); list-style: none; padding: 0; }
+    .toc a { display: inline-flex; align-items: center; min-height: var(--tap); }
+
+    .services { display: grid; gap: var(--space-5); }
+    @media (min-width: 900px) { .services { grid-template-columns: 1fr 1fr; } }
+    .service { display: flex; flex-direction: column; gap: var(--space-5); scroll-margin-top: var(--space-5); }
+    .service__art {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      object-fit: cover;
+      border-radius: var(--radius-control);
+      background: var(--bg-subtle);
+    }
+    @media (prefers-color-scheme: dark) { .service__art { opacity: 0.88; } }
+    .service__head { display: flex; align-items: center; gap: var(--space-3); }
+    .service__head h2 { font-size: var(--fs-md); }
+    .service__icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-control);
+      background: var(--accent-subtle);
+      color: var(--accent-fg);
+    }
+    .service__list { display: grid; gap: var(--space-4); }
+    .service__list dt {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-1);
+    }
+    .service__list ul { padding-inline-start: 1.15rem; }
+    .service__list li + li { margin-top: var(--space-1); }
+    .service__list li::marker { color: var(--accent); }
+    .service__example {
+      margin-top: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-height: var(--tap);
+      font-weight: 600;
+      font-size: var(--fs-sm);
+    }
+
+    .honesty { display: grid; gap: var(--space-5); list-style: none; padding: 0; max-width: 820px; }
+    .honesty__item { display: flex; gap: var(--space-3); }
+    .honesty__item > svg { flex: none; color: var(--accent-fg); margin-top: 0.15em; }
+    .honesty__item h3 { font-size: var(--fs-base); margin-bottom: var(--space-1); }
+  }
+</style>
