@@ -4,8 +4,8 @@ slug: fatura-otomasyonu
 order: 2
 kind: vitrin
 headline: Tablodaki satışların e-Arşiv faturası kendiliğinden kesiliyor
-# TODO(Emin): araç düzenli kullanılıyorsa status'ü "Kullanımda" yap.
-status: Tamamlandı
+status: Kullanımda
+period: Mart 2026'dan beri · en uzun süredir çalışan işim
 sector: e-Arşiv fatura kesen küçük işletmeler
 summary: Her satış için portala girip aynı bilgileri yazmak yerine, satış listesi bir tabloda duruyor; faturaları araç sırayla kesiyor.
 # TODO(Emin): fatura başına önceki/sonraki süre ve aylık fatura adedi gelince ekle.
