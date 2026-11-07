@@ -107,7 +107,7 @@
         },
         {
           "src": "/media/projects/fatura-otomasyonu/shot-2.webp",
-          "alt": "Bekleyen faturalar tablosunun yakın görünümü: ad, il, tarih, kalem, tutar ve ÖTV sütunları",
+          "alt": "Özet sayaçlar ve bekleyen faturalar tablosunun yakın görünümü: ad, il, tarih, kalem, tutar, ÖTV ve durum sütunları (sahte veri)",
           "w": 1600,
           "h": 832
         }
