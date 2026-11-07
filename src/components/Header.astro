@@ -1,6 +1,7 @@
 ---
 import ContactButton from './ContactButton.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import BrandMark from './BrandMark.astro';
 
 interface Props { lang?: 'tr' | 'en' }
 const { lang = 'tr' } = Astro.props;
@@ -22,7 +23,7 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
 <header class="site-header">
   <div class="container site-header__inner">
     <a class="brand" href={lang === 'en' ? '/en' : '/'} aria-label={lang === 'en' ? 'Emin Akkaya, home' : 'Emin Akkaya, ana sayfa'}>
-      <span class="brand__mark" aria-hidden="true">EA</span>
+      <span class="brand__mark"><BrandMark size={28} /></span>
       <span class="brand__name">Emin Akkaya</span>
     </a>
     <nav class="site-nav" aria-label={lang === 'en' ? 'Main' : 'Ana menü'}>
@@ -76,14 +77,12 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
     .brand__mark {
       display: grid;
       place-items: center;
-      width: 32px;
-      height: 32px;
-      border-radius: var(--radius-control);
-      background: var(--accent-interactive);
-      color: var(--on-accent);
-      font-size: var(--fs-xs);
-      font-weight: 700;
-      letter-spacing: 0;
+      color: var(--accent-fg);
+      transition: transform var(--duration-fast) var(--ease);
+    }
+    .brand:hover .brand__mark { transform: rotate(-12deg); }
+    @media (prefers-reduced-motion: reduce) {
+      .brand:hover .brand__mark { transform: none; }
     }
     .site-nav { order: 3; flex-basis: 100%; }
     .site-nav ul {

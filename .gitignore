@@ -4,3 +4,6 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Gemini logo denemeleri (ham, yerel)
+brand/gemini/
