@@ -46,7 +46,7 @@
   "projects": {
     "whatsapp-siparis": {
       "cover": "/media/projects/whatsapp-siparis/cover.webp",
-      "coverAlt": "Sipariş otomasyonu paneli: WhatsApp'tan gelen örnek siparişler kart görünümünde, durum rozetleriyle listeleniyor",
+      "coverAlt": "Sipariş otomasyonu paneli: WhatsApp'tan gelen örnek siparişler kart görünümünde; durum rozetleri ikon ve metinle (sahte veri)",
       "coverW": 1600,
       "coverH": 1000,
       "shots": [
@@ -58,19 +58,19 @@
         },
         {
           "src": "/media/projects/whatsapp-siparis/shot-2.webp",
-          "alt": "Sipariş yönetimi tablosu: tarih, müşteri, ürün, ödeme tipi ve kayıt durumu sütunları; sahte örnek kayıtlar",
+          "alt": "Sipariş yönetimi tablosu: tarih, müşteri, adres, ürünler, sağa yaslı tutar ve ikonlu durum rozetleri; sahte örnek kayıtlar",
           "w": 1440,
           "h": 900
         },
         {
           "src": "/media/projects/whatsapp-siparis/shot-3.webp",
-          "alt": "Canlı durum ekranı: bağlantı aktif, anlık özet sayaçları ve sipariş işleme günlüğü",
+          "alt": "Canlı durum ekranı: bağlantı aktif, anlık özet sayaçları ve seviye ikonlu sipariş işleme günlüğü",
           "w": 1440,
           "h": 900
         },
         {
           "src": "/media/projects/whatsapp-siparis/shot-4.webp",
-          "alt": "Sipariş yönetimi tablosunun koyu tema görünümü",
+          "alt": "Sipariş yönetimi tablosunun koyu (espresso) tema görünümü",
           "w": 1440,
           "h": 900
         }
@@ -122,29 +122,69 @@
     },
     "whatsagent": {
       "cover": "/media/projects/whatsagent/cover.webp",
-      "coverAlt": "Örnek konuşma: WhatsApp'tan ERP asistanına cari bakiyesi soruluyor, asistan bakiye ve vade bilgisini yanıtlıyor (temsili)",
+      "coverAlt": "WhatsAgent yönetim paneli: aylık ciro, kasa/banka, vadesi geçen alacak ve kritik stok kartları, alacak yaşı şeridi, ölü stok ve en çok satanlar (örnek veri)",
       "coverW": 1600,
       "coverH": 1000,
       "shots": [
         {
           "src": "/media/projects/whatsagent/shot-1.webp",
-          "alt": "Örnek konuşma: cari bakiyesi ve son üç hareket WhatsApp üzerinden soruluyor ve tablo halinde yanıtlanıyor (temsili, sahte veri)",
+          "alt": "Yönetim & Karar Masası: ciro, likit varlık, vadesi geçen alacak ve kritik stok KPI'ları; ölü stok ve son 30 günün en çok satan ürünleri (örnek veri)",
           "w": 1600,
           "h": 1000
         },
         {
           "src": "/media/projects/whatsagent/shot-2.webp",
-          "alt": "Örnek konuşma: stok sorgusu ve onaya bağlı sipariş taslağı; onay verilmeden ERP'ye kayıt yapılmıyor (temsili, sahte veri)",
+          "alt": "Canlı WhatsApp masası: Örnek Ticaret A.Ş. 20 adet Ürün A sipariş ediyor, asistan onay özeti çıkarıyor, EVET sonrası sipariş yetkili onayına düşüyor (örnek veri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/whatsagent/shot-3.webp",
+          "alt": "Sipariş yönetimi: müşterinin onayladığı sipariş yetkili (patron) onayı bekliyor; ikinci adım onay penceresi stok düşümü ve cari borcu öncesinde açılıyor (örnek veri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/whatsagent/shot-4.webp",
+          "alt": "Cari hareketler ve ekstre: Örnek Ticaret A.Ş. için fatura ve tahsilat satırları, vade tarihleri ve yürüyen bakiye (örnek veri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/whatsagent/shot-5.webp",
+          "alt": "Koyu tema cari listesi: cari kodu, unvan, iskonto, risk limiti ve güncel bakiye sütunları (örnek veri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/whatsagent/shot-6.webp",
+          "alt": "Örnek konuşma: cari bakiyesi ve son üç hareket WhatsApp üzerinden soruluyor ve tablo halinde yanıtlanıyor (temsili çizim, örnek veri)",
+          "w": 1600,
+          "h": 1000
+        },
+        {
+          "src": "/media/projects/whatsagent/shot-7.webp",
+          "alt": "Örnek konuşma: stok sorgusu ve onaya bağlı sipariş taslağı; onay verilmeden ERP'ye kayıt yapılmıyor (temsili çizim, örnek veri)",
           "w": 1600,
           "h": 1000
         }
       ],
-      "note": "Gerçek oturum/veri kullanılmadı; görseller sahte verili demo kopyasından veya temsili çizimden üretildi.",
+      "note": "Gerçek oturum/veri kullanılmadı; ekranlar uygulamanın gerçek arayüzünden, tamamen uydurma veriyle doldurulmuş yerel demo kopyasından (WhatsApp/ERP/LLM bağlantısı olmadan) alındı; son iki görsel temsili çizimdir.",
       "thumb": {
         "src": "/media/projects/whatsagent/thumb.webp",
-        "alt": "Örnek konuşma: WhatsApp'tan ERP asistanına cari bakiyesi soruluyor, asistan bakiyeyi yanıtlıyor (temsili, sahte veri)",
+        "alt": "Canlı masadan yakın görünüm: asistanın sipariş onay özeti ve müşterinin EVET yanıtı (örnek veri)",
         "w": 960,
         "h": 600
+      },
+      "demo": {
+        "mp4": "/media/projects/whatsagent/demo.mp4",
+        "webm": "/media/projects/whatsagent/demo.webm",
+        "poster": "/media/projects/whatsagent/demo-poster.webp",
+        "w": 1280,
+        "h": 800,
+        "muted": true,
+        "duration": 16.3,
+        "alt": "Yönetim panelinden cari ekstresine, ardından canlı masada bakiye sorusu ve WhatsApp siparişine, son olarak siparişin iki adımlı yetkili onay penceresine geçiş (örnek veri)"
       }
     },
     "learncard": {
