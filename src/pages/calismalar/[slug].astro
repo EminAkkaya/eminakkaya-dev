@@ -27,6 +27,8 @@ const d = project.data;
 const { Content } = await render(project);
 const media = projectMedia(d.slug, d.title, d);
 const shots = media.shots;
+// Galeri satırları boş kalmasın: 3'e bölünüyorsa 3 sütun, değilse 2 sütun (tekse son görsel tam satır).
+const shotCols = shots.length % 3 === 0 ? 3 : 2;
 ---
 
 <Base title={d.title} description={`${d.headline}. ${d.summary}`} ogType="article">
@@ -66,26 +68,41 @@ const shots = media.shots;
       )}
     </div>
 
-    <div class="container case-body">
+    <div class="container case-story">
       <div class="prose">
         <Content />
-
-        {d.quote && (
-          <>
-            <h2>Müşteri ne diyor</h2>
-            <figure class="case-quote">
-              <blockquote><p>{d.quote.text}</p></blockquote>
-              <figcaption class="small muted">{d.quote.author}</figcaption>
-            </figure>
-          </>
-        )}
       </div>
 
+      <aside class="case-aside" aria-label="Özet">
+        {d.quote && (
+          <figure class="aside-card case-quote">
+            <Icon name="quote" size={22} class="case-quote__icon" />
+            <blockquote><p>{d.quote.text}</p></blockquote>
+            <figcaption class="small muted">{d.quote.author}</figcaption>
+          </figure>
+        )}
+        {d.tech.length > 0 && (
+          <div class="aside-card">
+            <h2 class="aside-title">Kullanılanlar</h2>
+            <ul class="cluster tech__tags" role="list" aria-label="Kullanılan teknolojiler">
+              {d.tech.map((t) => <li class="tag">{t}</li>)}
+            </ul>
+          </div>
+        )}
+        <section class="aside-card case-cta" aria-labelledby="benzer">
+          <h2 id="benzer" class="aside-title">Benzer bir derdiniz mi var?</h2>
+          <p class="muted small">Bugün işin nasıl yapıldığını kısaca anlatın; nasıl kolaylaşabileceğini birlikte konuşalım.</p>
+          <ContactButton size="sm" />
+        </section>
+      </aside>
+    </div>
+
+    <div class="container case-body">
       {shots.length > 0 && (
         <section class="shots" aria-labelledby="ekranlar">
           <h2 id="ekranlar">Ekranlar</h2>
           <p class="small muted">Görüntüler sahte (örnek) veriyle hazırlandı.</p>
-          <div class="shots__grid">
+          <div class="shots__grid" data-cols={shotCols} style={`--shot-cols: ${shotCols}`}>
             {shots.map((s) => (
               <figure>
                 <a href={s.src} class="shots__link" data-lightbox={`shots-${d.slug}`}>
@@ -111,18 +128,13 @@ const shots = media.shots;
         </ul>
       )}
 
-      {(d.techDetails.length > 0 || d.tech.length > 0) && (
+      {d.techDetails.length > 0 && (
         <details class="disclosure tech">
           <summary>
             <span>Teknik detaylar</span>
             <Icon name="chevron-down" size={18} />
           </summary>
           <div class="disclosure__body">
-            {d.tech.length > 0 && (
-              <ul class="cluster tech__tags" role="list" aria-label="Kullanılan teknolojiler">
-                {d.tech.map((t) => <li class="tag">{t}</li>)}
-              </ul>
-            )}
             {d.techDetails.length > 0 && (
               <ul class="tech__list">
                 {d.techDetails.map((t) => <li>{t}</li>)}
@@ -132,11 +144,6 @@ const shots = media.shots;
         </details>
       )}
 
-      <section class="case-cta" aria-labelledby="benzer">
-        <h2 id="benzer">Benzer bir derdiniz mi var?</h2>
-        <p class="muted">Bugün işin nasıl yapıldığını kısaca anlatın; nasıl kolaylaşabileceğini birlikte konuşalım.</p>
-        <ContactButton />
-      </section>
     </div>
   </article>
 
@@ -146,13 +153,13 @@ const shots = media.shots;
         <span class="small muted"><Icon name="arrow-left" size={14} /> Önceki</span>
         <span>{prev.data.title}</span>
       </a>
-    ) : <span />}
+    ) : null}
     {next ? (
       <a class="pager__link pager__link--next" href={`/calismalar/${next.data.slug}`} rel="next">
         <span class="small muted">Sonraki <Icon name="arrow-right" size={14} /></span>
         <span>{next.data.title}</span>
       </a>
-    ) : <span />}
+    ) : null}
   </nav>
 </Base>
 
@@ -198,17 +205,41 @@ const shots = media.shots;
     .case-media { margin-bottom: var(--space-7); }
     .case-media > * { max-width: 960px; }
 
+    .case-story { display: grid; gap: var(--space-6); margin-bottom: var(--space-7); }
+    .case-story .prose :global(h2:first-child) { margin-top: 0; }
+    @media (min-width: 1024px) {
+      .case-story { grid-template-columns: minmax(0, 1fr) 340px; gap: var(--space-8); align-items: start; }
+      .case-aside { position: sticky; top: var(--space-5); }
+    }
+    .case-aside { display: grid; gap: var(--space-4); }
+    .aside-card {
+      display: grid;
+      gap: var(--space-3);
+      justify-items: start;
+      padding: var(--space-5);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+    .aside-title { font-size: var(--fs-base); }
+    .case-quote :global(.case-quote__icon) { color: var(--accent); }
+    .case-quote blockquote { font-size: var(--fs-md); line-height: 1.5; }
+
     .case-body { display: grid; gap: var(--space-7); }
-    .case-body .prose :global(h2:first-child) { margin-top: 0; }
-    .case-quote { border-inline-start: 3px solid var(--accent); padding-inline-start: var(--space-4); }
-    .case-quote blockquote { font-size: var(--fs-md); }
 
     .shots > * + * { margin-top: var(--space-2); }
     .shots__grid {
       display: grid;
       gap: var(--space-4);
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+      grid-template-columns: 1fr;
       margin-top: var(--space-4);
+    }
+    @media (min-width: 640px) {
+      .shots__grid { grid-template-columns: repeat(var(--shot-cols, 2), minmax(0, 1fr)); }
+      .shots__grid > figure:last-child:nth-child(odd) { grid-column: 1 / -1; }
+      .shots__grid > figure:last-child:nth-child(odd) img { max-height: 420px; object-fit: cover; object-position: top center; }
+      .shots__grid[data-cols='3'] > figure:last-child:nth-child(odd) { grid-column: auto; }
     }
     .shots figure { display: grid; gap: var(--space-2); }
     .shots__link { display: block; border-radius: var(--radius-control); cursor: zoom-in; }
@@ -219,26 +250,14 @@ const shots = media.shots;
       background: var(--bg-subtle);
     }
 
-    .tech { max-width: var(--measure); }
-    .tech__tags { --cluster-space: var(--space-2); list-style: none; padding: 0; margin-bottom: var(--space-4); }
+    .tech__tags { --cluster-space: var(--space-2); list-style: none; padding: 0; }
     .tech__list { padding-inline-start: 1.15rem; display: grid; gap: var(--space-2); color: var(--text-secondary); }
     .tech__list li::marker { color: var(--accent); }
 
-    .case-cta {
-      display: grid;
-      gap: var(--space-3);
-      justify-items: start;
-      padding: var(--space-6) var(--space-5);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-      max-width: var(--measure);
-    }
 
     .pager {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
       gap: var(--space-4);
       margin-top: var(--space-7);
     }

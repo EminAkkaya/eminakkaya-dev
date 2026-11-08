@@ -16,7 +16,7 @@ techDetails:
   - "Sorular LLM function calling ile araçlara (bakiye, ekstre, stok, ciro, ölü stok, gün sonu raporu) yönlendiriliyor; LLM'e ulaşılamazsa kural tabanlı çevrimdışı motor devreye giriyor."
   - "Veri değiştiren her işlem (sipariş taslağı, ödeme linki vb.) iki adımlı onaydan geçiyor; risk limiti aşımında onay engelleniyor."
   - "WhatsApp kimlik eşleştirmesi (LID ↔ telefon) tek bir modülde; yalnız tanımlı carilere cevap veriliyor."
-  - "544 otomatik test, GitHub Actions ile Windows derlemesi. Sürüm v2.1.7."
+  - "587 otomatik test, GitHub Actions ile Windows derlemesi. Sürüm v2.1.8."
   - "Kod özel depoda (müşteri verisi içeriyor); ekran görüntüleri yalnız sahte (seed) veriyle."
 cover: /media/projects/whatsagent/cover.webp
 ---
@@ -43,7 +43,7 @@ hizmetine ulaşılamazsa temel sorular yine kural tabanlı olarak cevaplanıyor.
 Proje şu an **pilot aşamasında**. Sonuçları pilot bitince, ölçülmüş rakamlarla buraya
 yazacağım; o zamana kadar sonuç iddia etmiyorum.
 
-- Yazılım **544 otomatik testle** korunuyor; her değişiklikten sonra bu testler çalışıyor.
+- Yazılım **587 otomatik testle** korunuyor; her değişiklikten sonra bu testler çalışıyor.
 
 <!-- TODO(Emin): pilot bitince ölçülen sonuçları ekle (ör. haftada kaç soru WhatsApp'tan cevaplandı, ekstre gönderimi). -->
 <!-- TODO(Emin): pilot işletmeden yorum gelirse frontmatter'a quote ekle. -->
