@@ -9,8 +9,11 @@ status: Kullanımda
 sector: Butik / perakende
 period: Ağustos 2026'dan beri
 summary: Siparişler WhatsApp grubuna fotoğraf ve mesaj olarak geliyordu. Artık bir masaüstü uygulaması bunları okuyup kendiliğinden kaydediyor.
-# TODO(Emin): işletmeden ölçülmüş rakamlar gelince ekle, ör. { value: "~40", label: "günlük sipariş" }
-metrics: []
+metrics:
+  - { value: "2 saat", label: "her gün kazanılan zaman (işletmenin ifadesi)" }
+quote:
+  text: "Eskiden akşam 10'da biten işimiz artık 8'de bitiyor. Bu program bize her gün 2 saat kazandırdı."
+  author: "Butik sahibi, Sakarya"
 tech: [Electron, Node.js, Baileys, GPT-4o / Gemini Vision, SQLite, Playwright]
 techDetails:
   - "Masaüstü uygulaması: Electron + Node.js; Windows kurulum paketi GitHub Actions ile derleniyor, uygulama kendini güncelliyor (auto-updater)."
@@ -29,7 +32,7 @@ adres, birkaç satır not. Birinin her gün bu mesajları tek tek okuyup ürün,
 adres bilgisini ayrı bir yere yazması gerekiyordu. Yoğun günlerde sipariş atlanabiliyor,
 yanlış yazılabiliyor.
 
-<!-- TODO(Emin): işletmeden öğren: "her gün X saat bunları yazmakla geçiyordu" cümlesini ekle. -->
+İşletmenin anlatımıyla: siparişleri yazmakla geçen iş yüzünden gün akşam 10'da bitiyordu.
 
 ## Ne yaptım
 

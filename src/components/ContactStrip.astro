@@ -2,15 +2,16 @@
 import ContactButton from './ContactButton.astro';
 import { EMAIL, LOCATION } from '../config';
 
-interface Props { title?: string; text?: string; message?: string }
+interface Props { title?: string; text?: string; message?: string; id?: string }
 const {
   title = 'Elle yapılan bir işiniz mi var?',
   text = 'Kısaca anlatın; yazılımla çözülüp çözülmeyeceğini dürüstçe söylerim. Ön görüşme ücretsiz.',
   message,
+  id,
 } = Astro.props;
 ---
 
-<section class="strip" aria-labelledby="iletisim-seridi">
+<section class="strip" id={id} aria-labelledby="iletisim-seridi">
   <div class="container">
     <div class="strip__inner">
       <div class="strip__text">

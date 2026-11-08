@@ -1,0 +1,333 @@
+---
+// Ana sayfa vitrini: projeler sırayla gerçek ekranlarıyla döner, karta tıklayınca vaka sayfası açılır.
+// Hareket azaltma açıksa otomatik geçiş ve video oynatma yok; sekmelerle elle gezilir.
+import type { Project } from '../lib/projects';
+import { projectMedia } from '../lib/media';
+import StatusBadge from './StatusBadge.astro';
+import Icon from './Icon.astro';
+
+interface Props { projects: Project[]; seconds?: number }
+const { projects, seconds = 7 } = Astro.props;
+
+const slides = projects.map((p) => {
+  const d = p.data;
+  const m = projectMedia(d.slug, d.title, d);
+  const still = m.demo?.poster ?? m.cover ?? m.thumb?.src ?? null;
+  return { d, m, still, href: `/calismalar/${d.slug}` };
+});
+const total = String(slides.length).padStart(2, '0');
+---
+
+<section class="showcase" aria-roledescription="carousel" aria-label="Seçili işler" data-showcase style={`--slide-dur: ${seconds}s`}>
+  <div class="showcase__stage">
+    {slides.map((s, i) => (
+      <a
+        class="slide"
+        href={s.href}
+        id={`vitrin-${s.d.slug}`}
+        role="group"
+        aria-roledescription="slayt"
+        aria-label={`${i + 1} / ${slides.length}: ${s.d.title}`}
+        data-active={i === 0 ? '' : undefined}
+        aria-hidden={i === 0 ? undefined : 'true'}
+        tabindex={i === 0 ? undefined : -1}
+      >
+        <div class="slide__media">
+          {s.m.demo && (s.m.demo.webm || s.m.demo.mp4) ? (
+            <video
+              muted
+              loop
+              playsinline
+              preload="none"
+              poster={s.still ?? undefined}
+              data-webm={s.m.demo.webm}
+              data-mp4={s.m.demo.mp4}
+              aria-hidden="true"
+            ></video>
+          ) : s.still ? (
+            <img
+              src={s.still}
+              alt=""
+              width="1600"
+              height="1000"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          ) : null}
+        </div>
+        <div class="slide__text">
+          <span class="slide__idx">{String(i + 1).padStart(2, '0')} / {total}</span>
+          <h2 class="slide__title">{s.d.title}</h2>
+          <p class="slide__line">{s.d.headline}</p>
+          <div class="cluster slide__meta">
+            <StatusBadge status={s.d.status} />
+            <span class="small muted">{s.d.sector}</span>
+          </div>
+          <span class="slide__more">Nasıl yaptım <Icon name="arrow-right" size={16} /></span>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  <div class="showcase__bar">
+    <div class="showcase__tabs" role="tablist" aria-label="Projeler">
+      {slides.map((s, i) => (
+        <button
+          type="button"
+          class="tab"
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-controls={`vitrin-${s.d.slug}`}
+          data-index={i}
+        >
+          <span class="visually-hidden">{s.d.title}</span>
+          <i aria-hidden="true"><b></b></i>
+        </button>
+      ))}
+    </div>
+    <button type="button" class="showcase__pause" data-pause aria-label="Otomatik geçişi durdur">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" class="i-pause"><path d="M9 5v14M15 5v14" /></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" class="i-play"><path d="M7 5l12 7-12 7z" /></svg>
+    </button>
+  </div>
+</section>
+
+<script>
+  function setup(root: HTMLElement) {
+    const slides = [...root.querySelectorAll<HTMLAnchorElement>('.slide')];
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.tab')];
+    const pauseBtn = root.querySelector<HTMLButtonElement>('[data-pause]')!;
+    const still = matchMedia('(prefers-reduced-motion: reduce)');
+    let cur = 0;
+    let userPaused = still.matches;
+    let hover = false;
+
+    const video = (i: number) => slides[i]?.querySelector('video') ?? null;
+    function load(v: HTMLVideoElement) {
+      if (v.dataset.loaded) return;
+      v.dataset.loaded = '1';
+      for (const [type, key] of [['video/webm', 'webm'], ['video/mp4', 'mp4']] as const) {
+        const src = v.dataset[key];
+        if (!src) continue;
+        const el = document.createElement('source');
+        el.src = src;
+        el.type = type;
+        v.appendChild(el);
+      }
+      v.load();
+    }
+    function syncPlay() {
+      const running = !userPaused && !hover;
+      root.toggleAttribute('data-paused', !running);
+      pauseBtn.setAttribute('aria-label', userPaused ? 'Otomatik geçişi başlat' : 'Otomatik geçişi durdur');
+      const v = video(cur);
+      if (!v || still.matches) return;
+      load(v);
+      if (running) v.play().catch(() => {});
+      else v.pause();
+    }
+    function show(i: number) {
+      const prev = video(cur);
+      prev?.pause();
+      cur = (i + slides.length) % slides.length;
+      slides.forEach((s, j) => {
+        const on = j === cur;
+        s.toggleAttribute('data-active', on);
+        if (on) { s.removeAttribute('aria-hidden'); s.removeAttribute('tabindex'); }
+        else { s.setAttribute('aria-hidden', 'true'); s.tabIndex = -1; }
+      });
+      tabs.forEach((t, j) => {
+        t.setAttribute('aria-selected', String(j === cur));
+        t.toggleAttribute('data-done', j < cur);
+        // ilerleme çubuğunun animasyonunu baştan başlat
+        const b = t.querySelector('b')!;
+        b.style.animation = 'none';
+        void b.offsetWidth;
+        b.style.animation = '';
+      });
+      // sıradaki videoyu önceden hazırla
+      const next = video((cur + 1) % slides.length);
+      if (next && !still.matches) next.preload = 'metadata';
+      syncPlay();
+    }
+
+    tabs.forEach((t, j) => {
+      t.addEventListener('click', () => show(j));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        e.preventDefault();
+        show(cur + (e.key === 'ArrowRight' ? 1 : -1));
+        tabs[cur].focus();
+      });
+      t.querySelector('b')!.addEventListener('animationend', () => {
+        if (j === cur) show(cur + 1);
+      });
+    });
+    pauseBtn.addEventListener('click', () => { userPaused = !userPaused; syncPlay(); });
+    root.addEventListener('pointerenter', () => { hover = true; syncPlay(); });
+    root.addEventListener('pointerleave', () => { hover = false; syncPlay(); });
+    root.addEventListener('focusin', () => { hover = true; syncPlay(); });
+    root.addEventListener('focusout', (e) => {
+      if (!root.contains(e.relatedTarget as Node)) { hover = false; syncPlay(); }
+    });
+    // ekran dışındayken dur
+    new IntersectionObserver(([e]) => {
+      const v = video(cur);
+      if (!e.isIntersecting) { root.setAttribute('data-offscreen', ''); v?.pause(); }
+      else { root.removeAttribute('data-offscreen'); syncPlay(); }
+    }).observe(root);
+
+    root.setAttribute('data-ready', '');
+    show(0);
+  }
+  document.querySelectorAll<HTMLElement>('[data-showcase]').forEach(setup);
+</script>
+
+<style>
+  @layer blocks {
+    .showcase {
+      display: grid;
+      gap: var(--space-3);
+      padding: var(--space-3);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+    }
+    .showcase__stage { display: grid; }
+    .slide {
+      grid-area: 1 / 1;
+      display: grid;
+      gap: var(--space-4);
+      align-content: start;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: var(--radius-control);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 400ms var(--ease), visibility 0s linear 400ms;
+    }
+    .slide[data-active] {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 400ms var(--ease), visibility 0s;
+    }
+    .slide:hover { color: var(--text); }
+    .slide__media {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--border);
+      background: var(--bg-subtle);
+    }
+    .slide__media :is(img, video) {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top left;
+      transition: transform 600ms var(--ease);
+    }
+    .slide:hover .slide__media :is(img, video) { transform: scale(1.015); }
+    .slide__text { display: grid; gap: var(--space-2); align-content: center; padding: 0 var(--space-2) var(--space-2); }
+    .slide__idx {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      letter-spacing: var(--tracking-wide);
+      color: var(--text-muted, var(--text-secondary));
+      font-variant-numeric: tabular-nums;
+    }
+    .slide__title { font-size: var(--fs-lg, 1.5rem); line-height: 1.15; }
+    .slide__line { font-size: var(--fs-md); color: var(--text-secondary); }
+    .slide__meta { --cluster-space: var(--space-2) var(--space-3); padding-top: var(--space-1); }
+    .slide__more {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-height: var(--tap);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+      color: var(--accent-fg);
+    }
+    .slide:hover .slide__more { text-decoration: underline; text-underline-offset: 0.3em; }
+    .slide:focus-visible { outline: 2px solid var(--focus, var(--accent)); outline-offset: 4px; }
+
+    @media (min-width: 860px) {
+      .showcase { padding: var(--space-4); }
+      .slide { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: var(--space-6); align-items: center; }
+      .slide__text { order: -1; padding: var(--space-4) 0 var(--space-4) var(--space-4); }
+      .slide__title { font-size: var(--fs-xl, 2rem); }
+    }
+
+    .showcase__bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      padding-inline: var(--space-2);
+    }
+    @media (min-width: 860px) { .showcase__bar { padding-inline: var(--space-4) 0; } }
+    .showcase__tabs { display: flex; gap: var(--space-1); }
+    .tab {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: var(--tap);
+      padding: 0;
+      border: 0;
+      background: none;
+      cursor: pointer;
+    }
+    .tab i {
+      position: relative;
+      display: block;
+      width: 32px;
+      height: 3px;
+      border-radius: 2px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .tab b {
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+    }
+    .tab[data-done] b { transform: scaleX(1); }
+    .tab[aria-selected='true'] b { transform: scaleX(1); }
+    .showcase[data-ready] .tab[aria-selected='true'] b {
+      transform: scaleX(0);
+      animation: slide-progress var(--slide-dur) linear forwards;
+    }
+    .showcase[data-paused] .tab b,
+    .showcase[data-offscreen] .tab b { animation-play-state: paused; }
+    .tab:hover i { background: var(--border-strong, var(--text-secondary)); }
+    .tab:focus-visible { outline: 2px solid var(--focus, var(--accent)); outline-offset: 2px; border-radius: var(--radius-control); }
+
+    .showcase__pause {
+      display: grid;
+      place-items: center;
+      width: var(--tap);
+      height: var(--tap);
+      border: 0;
+      border-radius: var(--radius-control);
+      background: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+    .showcase__pause:hover { background: var(--bg-hover); color: var(--text); }
+    .showcase__pause .i-play { display: none; }
+    .showcase[data-paused] .showcase__pause .i-pause { display: none; }
+    .showcase[data-paused] .showcase__pause .i-play { display: block; }
+
+    @keyframes slide-progress { to { transform: scaleX(1); } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slide, .slide[data-active] { transition: none; }
+      .showcase[data-ready] .tab[aria-selected='true'] b { animation: none; transform: scaleX(1); }
+      .showcase__pause { display: none; }
+      .slide:hover .slide__media :is(img, video) { transform: none; }
+    }
+  }
+</style>

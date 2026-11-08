@@ -3,15 +3,17 @@ import Base from '../layouts/Base.astro';
 import ContactStrip from '../components/ContactStrip.astro';
 import Icon from '../components/Icon.astro';
 import { services, honesty } from '../data/services';
-import { genImage } from '../lib/media';
+import { projectMedia } from '../lib/media';
 
-const art: Record<string, string> = {
-  whatsapp: 'servis-whatsapp-otomasyon.webp',
-  entegrasyon: 'servis-entegrasyon.webp',
-  arac: 'servis-ozel-arac.webp',
-  mobil: 'servis-mobil.webp',
-};
-const images = Object.fromEntries(services.map((s) => [s.id, genImage(art[s.id] ?? '', '')]));
+// Süs çizim yerine her hizmetin örnek işinden gerçek ekran.
+const images = Object.fromEntries(
+  services.map((s) => {
+    const slug = s.example?.href.split('/').pop() ?? '';
+    const m = projectMedia(slug, s.title, {});
+    const src = m.thumb?.src ?? m.cover;
+    return [s.id, src ? { src, alt: `${s.example?.label.replace(/^Örnek: /, '') ?? s.title} ekranı` } : null];
+  }),
+);
 ---
 
 <Base
@@ -39,7 +41,9 @@ const images = Object.fromEntries(services.map((s) => [s.id, genImage(art[s.id] 
       {services.map((s) => (
         <article class="card service" id={s.id} aria-labelledby={`${s.id}-t`}>
           {images[s.id] && (
-            <img class="service__art" src={images[s.id]!.src} alt="" width="960" height="720" loading="lazy" decoding="async" />
+            <a class="service__shot" href={s.example?.href} tabindex="-1" aria-hidden="true">
+              <img src={images[s.id]!.src} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
+            </a>
           )}
           <header class="service__head">
             <span class="service__icon"><Icon name={s.icon} size={22} /></span>
@@ -108,14 +112,15 @@ const images = Object.fromEntries(services.map((s) => [s.id, genImage(art[s.id] 
     .services { display: grid; gap: var(--space-5); }
     @media (min-width: 900px) { .services { grid-template-columns: 1fr 1fr; } }
     .service { display: flex; flex-direction: column; gap: var(--space-5); scroll-margin-top: var(--space-5); }
-    .service__art {
-      width: 100%;
-      aspect-ratio: 2 / 1;
-      object-fit: cover;
+    .service__shot {
+      display: block;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
       border-radius: var(--radius-control);
+      border: 1px solid var(--border);
       background: var(--bg-subtle);
     }
-    @media (prefers-color-scheme: dark) { .service__art { opacity: 0.88; } }
+    .service__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
     .service__head { display: flex; align-items: center; gap: var(--space-3); }
     .service__head h2 { font-size: var(--fs-md); }
     .service__icon {

@@ -53,7 +53,13 @@ export interface Testimonial {
   project?: string; // çalışma slug'ı
 }
 
-// Müşteri yorumları. Boş kaldıkça ana sayfadaki yorum bölümü görünmez.
-// TODO(Emin): WhatsApp Sipariş'i kullanan işletmeden izinle 1-2 cümlelik yorum ekle
-// (isim izni yoksa author: "Sakarya'da bir butik" gibi anonim yaz).
-export const testimonials: Testimonial[] = [];
+// Müşteri yorumları. İlki ana sayfanın üst bölümünde gösterilir.
+// İşletmenin adı izinle yazılacaksa author'u güncelle.
+export const testimonials: Testimonial[] = [
+  {
+    text: "Eskiden akşam 10'da biten işimiz artık 8'de bitiyor. Bu program bize her gün 2 saat kazandırdı.",
+    author: 'Butik sahibi',
+    role: 'Sakarya',
+    project: 'whatsapp-siparis',
+  },
+];

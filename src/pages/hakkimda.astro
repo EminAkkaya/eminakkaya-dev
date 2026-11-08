@@ -26,6 +26,25 @@ const principles = [
 <Base title="Hakkımda" description="Muhammet Emin Akkaya: Sakarya'da, işletmelerin WhatsApp, Excel ve ERP üzerinden yürüyen işlerini otomatikleştiren yazılımcı. Bilgisayar Mühendisliği son sınıf.">
   <section class="section">
     <div class="container about">
+      <figure class="about__photo">
+        <img
+          src="/media/about/portre-960.webp"
+          srcset="/media/about/portre-480.webp 480w, /media/about/portre-960.webp 960w"
+          sizes="(min-width: 960px) 340px, 200px"
+          alt="Muhammet Emin Akkaya"
+          width="960"
+          height="1192"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <figcaption class="about__facts">
+          <dl>
+            <div><dt>Konum</dt><dd>Sakarya ve uzaktan</dd></div>
+            <div><dt>Odak</dt><dd>WhatsApp, Excel ve ERP otomasyonu</dd></div>
+            <div><dt>Şu an</dt><dd>WhatsAgent pilotu ve LearnCard mağaza hazırlığı</dd></div>
+          </dl>
+        </figcaption>
+      </figure>
       <div class="about__text">
         <p class="eyebrow">Hakkımda</p>
         <h1>Merhaba, ben Emin.</h1>
@@ -56,7 +75,7 @@ const principles = [
           <p>
             Geliştirirken yapay zekâ araçlarını planlı ve testli bir düzen içinde kullanıyorum:
             her işin yazılı bir planı, kararların kaydı ve otomatik testleri olur. Bu sayede tek
-            kişi olarak hızlı ama kontrollü ilerleyebiliyorum; örneğin WhatsAgent 544 otomatik
+            kişi olarak hızlı ama kontrollü ilerleyebiliyorum; örneğin WhatsAgent 587 otomatik
             testle korunuyor.
           </p>
         </div>
@@ -67,11 +86,13 @@ const principles = [
   <section class="section" aria-labelledby="ilkeler">
     <div class="container">
       <div class="section-head"><h2 id="ilkeler">Çalışma ilkelerim</h2></div>
-      <ul class="grid principles" role="list" style="--grid-min: 260px">
+      <ul class="principles" role="list">
         {principles.map((p) => (
           <li class="card">
-            <Icon name={p.icon} size={22} class="principle__icon" />
-            <h3>{p.title}</h3>
+            <div class="principle__head">
+              <span class="principle__icon"><Icon name={p.icon} size={20} /></span>
+              <h3>{p.title}</h3>
+            </div>
             <p class="muted">{p.text}</p>
           </li>
         ))}
@@ -88,9 +109,49 @@ const principles = [
 
 <style>
   @layer blocks {
-    .principles { list-style: none; padding: 0; }
-    .principles li > * + * { margin-top: var(--space-2); }
-    .principles :global(.principle__icon) { color: var(--accent-fg); }
+    .about { display: grid; gap: var(--space-6); }
+    .about__photo { display: grid; gap: var(--space-4); align-content: start; }
+    .about__photo img {
+      width: 200px;
+      height: auto;
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border);
+    }
+    .about__facts dl { display: grid; gap: var(--space-3); }
+    .about__facts dt {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .about__facts dd { font-size: var(--fs-sm); }
+    .about__text { max-width: var(--measure); }
+    @media (min-width: 960px) {
+      .about { grid-template-columns: minmax(0, 1fr) 340px; gap: var(--space-8); align-items: start; }
+      .about__photo { order: 2; position: sticky; top: var(--space-5); }
+      .about__photo img { width: 100%; }
+    }
+
+    .principles {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+      list-style: none;
+      padding: 0;
+    }
+    .principles li > * + * { margin-top: var(--space-3); }
+    .principle__head { display: flex; align-items: center; gap: var(--space-3); }
+    .principle__icon {
+      flex: none;
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-control);
+      background: var(--accent-subtle);
+      color: var(--accent-fg);
+    }
     .principles h3 { font-size: var(--fs-base); }
   }
 </style>

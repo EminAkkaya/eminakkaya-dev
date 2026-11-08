@@ -3,18 +3,17 @@ import Base from '../layouts/Base.astro';
 import ContactButton from '../components/ContactButton.astro';
 import ContactStrip from '../components/ContactStrip.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import Showcase from '../components/Showcase.astro';
 import Icon from '../components/Icon.astro';
 import { getProjects } from '../lib/projects';
-import { pains, steps, testimonials } from '../data/home';
-import { genImage } from '../lib/media';
-
-const hero = genImage('hero.webp', 'Masa üzerinde telefon, defter ve fatura çizimi');
-const heroLg = genImage('hero-lg.webp');
+import { steps, testimonials } from '../data/home';
+import { services } from '../data/services';
 
 const projects = await getProjects();
 const vitrin = projects.filter((p) => p.data.kind === 'vitrin');
 const urun = projects.filter((p) => p.data.kind === 'urun');
 const diger = projects.filter((p) => p.data.kind === 'diger');
+const quote = testimonials[0];
 ---
 
 <Base description="İşletmenizdeki elle yapılan işleri otomatikleştiriyorum: WhatsApp siparişleri, e-Arşiv fatura kesme, ERP raporları. Sakarya ve uzaktan, ücretsiz ön görüşme.">
@@ -24,134 +23,123 @@ const diger = projects.filter((p) => p.data.kind === 'diger');
       <h1 class="hero__title">
         İşletmenizdeki elle yapılan işleri otomatikleştiriyorum: WhatsApp siparişleri, fatura kesme, ERP raporları.
       </h1>
-      <p class="hero__proof">
-        <Icon name="circle-check" size={18} />
-        <span>Şu an bir butiğin siparişleri bu sistemle kendiliğinden kayda geçiyor.</span>
-      </p>
+      {quote && (
+        <figure class="hero__quote">
+          <blockquote><p>“{quote.text}”</p></blockquote>
+          <figcaption>
+            {quote.author}{quote.role && `, ${quote.role}`}
+            {quote.project && <> · <a href={`/calismalar/${quote.project}`}>bu işi gör</a></>}
+          </figcaption>
+        </figure>
+      )}
       <div class="cluster hero__actions">
         <ContactButton />
         <a class="btn" data-variant="ghost" href="#calismalar">Çalışmalarım</a>
       </div>
-      {hero && (
-        <img
-          class="hero__art"
-          src={hero.src}
-          srcset={heroLg ? `${hero.src} ${hero.width ?? 1600}w, ${heroLg.src} ${heroLg.width ?? 2400}w` : undefined}
-          sizes="(min-width: 1184px) 1120px, 92vw"
-          alt={hero.alt}
-          width={hero.width ?? 1600}
-          height={hero.height ?? 893}
-          fetchpriority="high"
-          decoding="async"
-        />
-      )}
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="dertler">
-    <div class="container">
-      <div class="section-head">
-        <h2 id="dertler">Bunlardan biri tanıdık mı?</h2>
-        <p class="muted">Her biri için çalışan bir çözüm geliştirdim.</p>
+      <div class="hero__showcase">
+        <Showcase projects={projects} />
       </div>
-      <ul class="pains" role="list">
-        {pains.map((p) => (
-          <li class="pain">
-            <span class="pain__icon"><Icon name={p.icon} size={22} /></span>
-            <div>
-              <h3 class="pain__title">{p.title}</h3>
-              <p class="muted">{p.text}</p>
-              {p.href && <a class="pain__link" href={p.href}>Nasıl çözdüm<span class="visually-hidden">: {p.title}</span></a>}
-            </div>
-          </li>
-        ))}
-      </ul>
     </div>
   </section>
 
   <section class="section" id="calismalar" aria-labelledby="calismalar-baslik">
     <div class="container">
-      <div class="section-head">
-        <p class="eyebrow">Çalışmalar</p>
-        <h2 id="calismalar-baslik">İşletmeler için yaptıklarım</h2>
+      <div class="section-head section-head--row">
+        <div>
+          <p class="eyebrow">Çalışmalar</p>
+          <h2 id="calismalar-baslik">İşletmeler için yaptıklarım</h2>
+        </div>
+        <a class="more-link" href="/calismalar">Tüm çalışmalar <Icon name="arrow-right" size={16} /></a>
       </div>
       <div class="grid" style="--grid-min: 300px">
         {vitrin.map((p) => <ProjectCard project={p} />)}
       </div>
 
-      {urun.length > 0 && (
+      {(urun.length > 0 || diger.length > 0) && (
         <>
           <div class="section-head mt-6">
-            <h2 class="sub-title">Kendi ürünlerim</h2>
-            <p class="muted">Müşteri işi değil; bir uygulamayı mağazaya kadar götürebildiğimin kanıtı.</p>
-          </div>
-          <div class="grid" style="--grid-min: 300px">
-            {urun.map((p) => <ProjectCard project={p} size="wide" />)}
-          </div>
-        </>
-      )}
-
-      {diger.length > 0 && (
-        <>
-          <div class="section-head mt-6">
-            <h2 class="sub-title">Diğer işler</h2>
+            <h3 class="sub-title">Kendi ürünlerim ve diğer işler</h3>
           </div>
           <div class="grid" style="--grid-min: 240px">
-            {diger.map((p) => <ProjectCard project={p} size="sm" />)}
+            {[...urun, ...diger].map((p) => <ProjectCard project={p} size="sm" />)}
           </div>
         </>
       )}
     </div>
   </section>
 
-  <section class="section" aria-labelledby="nasil">
+  <section class="section" id="hizmetler" aria-labelledby="hizmetler-baslik">
     <div class="container">
-      <div class="section-head">
-        <h2 id="nasil">Nasıl çalışıyorum</h2>
-        <p class="muted">Büyük bir projeye baştan bağlanmazsınız; önce küçük bir parçanın işe yaradığını görürsünüz.</p>
+      <div class="section-head section-head--row">
+        <div>
+          <p class="eyebrow">Hizmetler</p>
+          <h2 id="hizmetler-baslik">Bunlardan biri tanıdık mı?</h2>
+        </div>
+        <a class="more-link" href="/hizmetler">Hizmetler ve fiyatlandırma <Icon name="arrow-right" size={16} /></a>
       </div>
-      <ol class="steps" role="list">
+      <ul class="svc-grid" role="list">
+        {services.map((s) => (
+          <li class="svc">
+            <a class="svc__link" href={`/hizmetler#${s.id}`}>
+              <span class="icon-tile"><Icon name={s.icon} size={20} /></span>
+              <h3 class="svc__title">{s.title}</h3>
+              <p class="muted">{s.pain}</p>
+              <span class="svc__more">Ayrıntılar <Icon name="arrow-right" size={16} /></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <h3 class="sub-title steps-title">Nasıl çalışıyorum</h3>
+      <ol class="steps mt-4" role="list">
         {steps.map((s, i) => (
           <li class="step">
             <span class="step__num" aria-hidden="true">{i + 1}</span>
-            <h3 class="step__title"><span class="visually-hidden">Adım {i + 1}: </span>{s.title}</h3>
+            <h4 class="step__title"><span class="visually-hidden">Adım {i + 1}: </span>{s.title}</h4>
             <p class="muted">{s.text}</p>
           </li>
         ))}
       </ol>
-      <p class="mt-5"><a class="btn" data-variant="ghost" href="/hizmetler">Hizmetler ve fiyatlandırma</a></p>
     </div>
   </section>
 
-  {testimonials.length > 0 && (
-    <section class="section" aria-labelledby="yorumlar">
-      <div class="container">
-        <div class="section-head">
-          <h2 id="yorumlar">Müşteriler ne diyor</h2>
-        </div>
-        <div class="grid" style="--grid-min: 300px">
-          {testimonials.map((t) => (
-            <figure class="card quote">
-              <Icon name="quote" size={22} class="quote__icon" />
-              <blockquote><p>{t.text}</p></blockquote>
-              <figcaption class="small muted">
-                {t.author}{t.role && `, ${t.role}`}
-                {t.project && <> · <a href={`/calismalar/${t.project}`}>çalışmayı gör</a></>}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+  <section class="section" id="hakkimda" aria-labelledby="hakkimda-baslik">
+    <div class="container about-sum">
+      <img
+        class="about-sum__photo"
+        src="/media/about/portre-480.webp"
+        srcset="/media/about/portre-480.webp 480w, /media/about/portre-960.webp 960w"
+        sizes="(min-width: 860px) 280px, 160px"
+        alt="Muhammet Emin Akkaya"
+        width="480"
+        height="596"
+        loading="lazy"
+        decoding="async"
+      />
+      <div class="about-sum__text">
+        <p class="eyebrow">Hakkımda</p>
+        <h2 id="hakkimda-baslik">Merhaba, ben Emin.</h2>
+        <p class="lead">
+          Sakarya'dayım, Bilgisayar Mühendisliği son sınıftayım. Küçük ve orta ölçekli işletmelerin
+          her gün elle yaptığı işleri yazılıma devrediyorum.
+        </p>
+        <p class="muted">
+          Bu işe bir butiğin sipariş derdiyle başladım; o uygulama bugün hâlâ kullanılıyor ve sahadan
+          gelen her geri bildirimle güncelleniyor. Uzmanlık alanım belli: WhatsApp, Excel ve ERP
+          üzerinden yürüyen işleri otomatikleştirmek.
+        </p>
+        <a class="more-link" href="/hakkimda">Hakkımda ve çalışma ilkelerim <Icon name="arrow-right" size={16} /></a>
       </div>
-    </section>
-  )}
+    </div>
+  </section>
 
-  <ContactStrip />
+  <ContactStrip id="iletisim" />
 </Base>
 
 <style>
   @layer blocks {
-    .hero { padding-block: var(--space-7) var(--space-7); }
-    @media (min-width: 768px) { .hero { padding-block: var(--space-8); } }
+    .hero { padding-block: var(--space-7); }
+    @media (min-width: 768px) { .hero { padding-block: var(--space-8) var(--space-7); } }
     .hero__inner > * + * { margin-top: var(--space-4); }
     .hero__title {
       font-size: var(--fs-hero);
@@ -160,48 +148,31 @@ const diger = projects.filter((p) => p.data.kind === 'diger');
       max-width: 22ch;
     }
     @media (min-width: 768px) { .hero__title { max-width: 26ch; } }
-    .hero__proof {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--space-2);
-      color: var(--text-secondary);
-      font-size: var(--fs-md);
+    .hero__quote {
       max-width: var(--measure);
+      padding-inline-start: var(--space-4);
+      border-inline-start: 3px solid var(--accent);
     }
-    .hero__proof svg { color: var(--success-fg); margin-top: 0.25em; flex: none; }
+    .hero__quote blockquote { font-size: var(--fs-md); color: var(--text); }
+    .hero__quote figcaption { margin-top: var(--space-1); font-size: var(--fs-sm); color: var(--text-secondary); }
     .hero__actions { padding-top: var(--space-3); }
-    .hero__art {
-      width: 100%;
-      height: auto;
-      aspect-ratio: 16 / 7;
-      object-fit: cover;
-      margin-top: var(--space-6);
-      border-radius: var(--radius-card);
-      border: 1px solid var(--border);
-    }
-    @media (prefers-color-scheme: dark) { .hero__art { opacity: 0.88; } }
+    .hero__inner > .hero__showcase { margin-top: var(--space-6); }
 
+    section[id] { scroll-margin-top: var(--space-5); }
+
+    .section-head--row { max-width: none; display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-2) var(--space-5); }
+    .more-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-height: var(--tap);
+      font-size: var(--fs-sm);
+      font-weight: 600;
+    }
     .sub-title { font-size: var(--fs-md); }
+    .steps-title { margin-top: var(--space-8); }
 
-    .pains {
-      display: grid;
-      gap: var(--space-4);
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-      list-style: none;
-      padding: 0;
-    }
-    .pain {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      padding: var(--space-5);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
-    }
-    .pain > div > * + * { margin-top: var(--space-2); }
-    .pain__icon {
+    .icon-tile {
       flex: none;
       display: grid;
       place-items: center;
@@ -211,19 +182,44 @@ const diger = projects.filter((p) => p.data.kind === 'diger');
       background: var(--accent-subtle);
       color: var(--accent-fg);
     }
-    .pain__title { font-size: var(--fs-base); }
-    .pain__link {
+
+    .svc-grid {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+      list-style: none;
+      padding: 0;
+    }
+    .svc__link {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      height: 100%;
+      padding: var(--space-5);
+      color: var(--text);
+      text-decoration: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      transition: border-color var(--duration-fast) var(--ease);
+    }
+    .svc__link:hover { color: var(--text); border-color: var(--accent); }
+    .svc__title { font-size: var(--fs-base); }
+    .svc__more {
+      margin-top: auto;
       display: inline-flex;
       align-items: center;
-      min-height: var(--tap);
+      gap: var(--space-2);
       font-size: var(--fs-sm);
       font-weight: 600;
+      color: var(--accent-fg);
     }
 
     .steps {
       display: grid;
       gap: var(--space-4);
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
       list-style: none;
       padding: 0;
     }
@@ -250,8 +246,19 @@ const diger = projects.filter((p) => p.data.kind === 'diger');
     }
     .step__title { font-size: var(--fs-base); }
 
-    .quote { display: grid; gap: var(--space-3); }
-    .quote :global(.quote__icon) { color: var(--accent); }
-    .quote blockquote { font-size: var(--fs-md); }
+    .about-sum { display: grid; gap: var(--space-5); align-items: center; }
+    .about-sum__photo {
+      width: 160px;
+      height: auto;
+      aspect-ratio: 480 / 596;
+      object-fit: cover;
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border);
+    }
+    .about-sum__text { display: grid; gap: var(--space-3); justify-items: start; max-width: var(--measure); }
+    @media (min-width: 860px) {
+      .about-sum { grid-template-columns: 280px 1fr; gap: var(--space-7); }
+      .about-sum__photo { width: 280px; }
+    }
   }
 </style>

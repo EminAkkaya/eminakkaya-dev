@@ -12,12 +12,15 @@ const nav = lang === 'en'
       { href: '/', label: 'Türkçe' },
     ]
   : [
-      { href: '/hizmetler', label: 'Hizmetler' },
       { href: '/calismalar', label: 'Çalışmalar' },
+      { href: '/hizmetler', label: 'Hizmetler' },
       { href: '/hakkimda', label: 'Hakkımda' },
       { href: '/iletisim', label: 'İletişim' },
     ];
-const isActive = (href: string) => href !== '/' && (path === href || path.startsWith(href + '/'));
+// Ana sayfa tek sayfalık özet: menü aynı adlı bölümlere kaydırır; ayrıntı sayfasına bölümlerdeki linkler götürür.
+const onepage = lang === 'tr' && path === '/';
+const hrefOf = (href: string) => (onepage && href !== '/' ? `#${href.slice(1)}` : href);
+const isActive = (href: string) => !onepage && href !== '/' && (path === href || path.startsWith(href + '/'));
 ---
 
 <header class="site-header">
@@ -30,7 +33,7 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
       <ul>
         {nav.map((item) => (
           <li>
-            <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined} lang={lang === 'en' ? 'tr' : undefined}>
+            <a href={hrefOf(item.href)} data-spy={onepage ? item.href.slice(1) : undefined} aria-current={isActive(item.href) ? 'page' : undefined} lang={lang === 'en' ? 'tr' : undefined}>
               {item.label}
             </a>
           </li>
@@ -47,6 +50,31 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
     </div>
   </div>
 </header>
+
+{onepage && (
+  <script>
+    // Kaydırırken bulunulan bölümün menü öğesini işaretle.
+    const links = new Map(
+      [...document.querySelectorAll<HTMLAnchorElement>('.site-nav a[data-spy]')].map((a) => [a.dataset.spy!, a]),
+    );
+    const seen = new Map<string, boolean>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) seen.set(e.target.id, e.isIntersecting);
+        const first = [...links.keys()].find((id) => seen.get(id));
+        links.forEach((a, id) => {
+          if (id === first) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        });
+      },
+      { rootMargin: '-35% 0px -55% 0px' },
+    );
+    links.forEach((_, id) => {
+      const el = document.getElementById(id);
+      if (el) io.observe(el);
+    });
+  </script>
+)}
 
 <style>
   @layer blocks {
@@ -105,7 +133,7 @@ const isActive = (href: string) => href !== '/' && (path === href || path.starts
       border-radius: var(--radius-control);
     }
     .site-nav a:hover { color: var(--text); background: var(--bg-hover); }
-    .site-nav a[aria-current='page'] {
+    .site-nav a:is([aria-current='page'], [aria-current='location']) {
       color: var(--text);
       text-decoration: underline;
       text-decoration-color: var(--accent);
