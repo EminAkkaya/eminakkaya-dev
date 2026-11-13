@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { EMAIL } from '../../config';
+
+const body = 'Merhaba,\n\nLearnCard hesabımın ve tüm verilerimin silinmesini istiyorum.\nHesap e-posta adresim: ';
+const deleteMail = `mailto:${EMAIL}?subject=${encodeURIComponent('LearnCard hesap silme talebi')}&body=${encodeURIComponent(body)}`;
+---
+
+<Base
+  title="LearnCard Hesap Silme"
+  description="LearnCard hesabını ve tüm verilerini nasıl silersin: uygulama içinden ya da e-postayla talep."
+>
+  <section class="section">
+    <div class="container">
+      <article class="prose">
+        <p class="eyebrow"><a href="/learncard">LearnCard</a></p>
+        <h1>Hesap ve veri silme</h1>
+        <p class="lead">
+          LearnCard hesabını ve hesabına bağlı tüm verileri istediğin zaman kalıcı olarak silebilirsin.
+          LearnCard'ın geliştiricisi Muhammet Emin Akkaya'dır.
+        </p>
+
+        <h2>1. Uygulama içinden (anında)</h2>
+        <ol>
+          <li>LearnCard'ı aç ve hesabınla giriş yap.</li>
+          <li><strong>Ayarlar</strong> sekmesine gir.</li>
+          <li><strong>Hesabı Sil</strong>'e dokun ve onay kutusuna <strong>SİL</strong> yaz.</li>
+        </ol>
+        <p>Hesabın ve buluttaki tüm verilerin hemen silinir, cihazdaki kopyalar da temizlenir.</p>
+
+        <h2>2. Uygulamaya erişemiyorsan (e-postayla)</h2>
+        <p>
+          Hesabına kayıtlı e-posta adresinden <a href={`mailto:${EMAIL}`}>{EMAIL}</a> adresine
+          “LearnCard hesap silme talebi” konulu bir e-posta gönder. Talebin en geç <strong>30 gün</strong>
+          içinde tamamlanır ve sana e-postayla bildirilir.
+        </p>
+        <p>
+          <a class="btn" data-variant="primary" href={deleteMail}><Icon name="mail" />Silme talebi gönder</a>
+        </p>
+
+        <h2>Silinen veriler</h2>
+        <ul>
+          <li>Hesabın ve e-posta adresin</li>
+          <li>Kelime kartların ve tekrar geçmişin</li>
+          <li>Kaydettiğin okuma metinleri</li>
+        </ul>
+
+        <h2>Saklanan veriler</h2>
+        <p>
+          Silme işleminden sonra hesabına ait hiçbir veri saklanmaz. Altyapı sağlayıcısının (Supabase)
+          otomatik yedeklerinde kalan kopyalar, yedeklerin olağan dönüşüyle en geç 30 gün içinde silinir.
+        </p>
+        <p class="muted small">
+          Misafir modunda (hesapsız) kullandıysan verilerin yalnızca cihazındadır; uygulamayı kaldırmak
+          hepsini siler. Ayrıntılar: <a href="/learncard/gizlilik">gizlilik politikası</a>.
+        </p>
+
+        <h2 lang="en">In English</h2>
+        <div lang="en">
+          <p>
+            To delete your LearnCard account and all associated data (account, email address, flashcards,
+            review history, saved texts): open the app, go to <strong>Settings → Delete account</strong> and
+            type <strong>SİL</strong> to confirm. If you cannot access the app, email
+            <a href={`mailto:${EMAIL}`}>{EMAIL}</a> from your account's email address with the subject
+            “LearnCard account deletion”; requests are completed within 30 days. No data is retained after
+            deletion; provider backups expire within 30 days.
+          </p>
+        </div>
+      </article>
+    </div>
+  </section>
+</Base>

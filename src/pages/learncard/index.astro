@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { EMAIL } from '../../config';
+
+const supportMail = `mailto:${EMAIL}?subject=${encodeURIComponent('LearnCard destek')}`;
+---
+
+<Base
+  title="LearnCard"
+  description="LearnCard: İngilizce metin okurken kelimeye dokunup kart yapan, aralıklı tekrarla ve oyunlarla öğreten mobil uygulama. Destek, gizlilik politikası ve hesap silme."
+>
+  <section class="section">
+    <div class="container measure">
+      <div class="lc-head">
+        <img src="/media/projects/learncard/icon-192.webp" alt="" width="72" height="72" class="lc-icon" />
+        <div>
+          <p class="eyebrow">Mobil uygulama</p>
+          <h1>LearnCard</h1>
+        </div>
+      </div>
+      <p class="lead mt-5">
+        İngilizce bir metin okurken bilmediğin kelimeye dokun; anlamı, okunuşu ve sesi açılsın.
+        Tek dokunuşla cümlesiyle birlikte kart yap, aralıklı tekrarla ve mini oyunlarla kalıcı öğren.
+        Hesap açmadan, internet olmadan da çalışır.
+      </p>
+
+      <ul class="lc-links mt-6" role="list">
+        <li>
+          <a class="card lc-link" href="/learncard/gizlilik">
+            <Icon name="shield-check" />
+            <span><strong>Gizlilik politikası</strong><span class="muted small">Hangi veriyi neden işliyoruz</span></span>
+            <Icon name="arrow-right" class="lc-arrow" />
+          </a>
+        </li>
+        <li>
+          <a class="card lc-link" href="/learncard/hesap-silme">
+            <Icon name="database-backup" />
+            <span><strong>Hesap ve veri silme</strong><span class="muted small">Hesabını ve tüm verilerini sil</span></span>
+            <Icon name="arrow-right" class="lc-arrow" />
+          </a>
+        </li>
+        <li>
+          <a class="card lc-link" href={supportMail}>
+            <Icon name="life-buoy" />
+            <span><strong>Destek</strong><span class="muted small">{EMAIL}</span></span>
+            <Icon name="arrow-right" class="lc-arrow" />
+          </a>
+        </li>
+      </ul>
+
+      <p class="muted small mt-6">
+        Uygulamanın nasıl yapıldığını merak ediyorsan: <a href="/calismalar/learncard">LearnCard çalışma sayfası</a>.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lc-head { display: flex; align-items: center; gap: var(--space-4); }
+  .lc-icon { width: 72px; height: 72px; border-radius: 18px; flex: none; }
+  .lc-links { display: grid; gap: var(--space-3); padding: 0; list-style: none; }
+  .lc-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    color: var(--text);
+    text-decoration: none;
+  }
+  .lc-link > span { display: grid; gap: 2px; flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .lc-link:hover { background: var(--bg-hover); }
+  .lc-link :global(.lc-arrow) { color: var(--text-secondary); flex: none; }
+</style>

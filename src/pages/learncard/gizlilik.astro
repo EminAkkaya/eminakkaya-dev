@@ -1,0 +1,106 @@
+---
+import Base from '../../layouts/Base.astro';
+import { EMAIL } from '../../config';
+
+// Metin LearnCardFlutter/docs/PRIVACY_POLICY.md ve uygulama içi gizlilik ekranıyla aynı tutulur.
+const UPDATED = '13 Kasım 2026';
+---
+
+<Base
+  title="LearnCard Gizlilik Politikası"
+  description="LearnCard mobil uygulamasının gizlilik politikası: hangi verileri neden işliyoruz, kimlerle paylaşıyoruz ve verilerini nasıl silebilirsin."
+>
+  <section class="section">
+    <div class="container">
+      <article class="prose">
+        <p class="eyebrow"><a href="/learncard">LearnCard</a></p>
+        <h1>Gizlilik Politikası</h1>
+        <p class="muted small">Yürürlük ve son güncelleme: {UPDATED}</p>
+
+        <p>
+          <strong>LearnCard</strong>, Muhammet Emin Akkaya tarafından geliştirilen, yabancı dilde okuma ve
+          kelime öğrenmeye yardımcı bir mobil uygulamadır. Bu politika hangi verileri neden işlediğimizi
+          açıklar. Sorularını <a href={`mailto:${EMAIL}`}>{EMAIL}</a> adresine yazabilirsin.
+        </p>
+
+        <h2>Misafir modu</h2>
+        <p>
+          Uygulamayı hesap açmadan kullanabilirsin. Bu durumda kartların, metinlerin ve istatistiklerin
+          yalnızca cihazında saklanır; bize hiçbir veri gelmez.
+        </p>
+
+        <h2>Hesap açarsan işlediğimiz veriler</h2>
+        <ul>
+          <li><strong>E-posta adresin:</strong> giriş, hesap doğrulama ve şifre sıfırlama için.</li>
+          <li>
+            <strong>Kelime kartların, tekrar geçmişin ve kaydettiğin metinler:</strong> cihazların arasında
+            senkronize etmek için.
+          </li>
+        </ul>
+        <p>
+          Bu veriler Supabase altyapısında saklanır. Veritabanı kuralları her kullanıcının yalnızca kendi
+          verisine erişmesine izin verir.
+        </p>
+
+        <h2>Üçüncü taraf servisler</h2>
+        <p>
+          Türkçe karşılıklar uygulamanın içindeki sözlükten (Wiktionary verisi) gelir. Bir kelimeye
+          dokunduğunda İngilizce tanım ve telaffuz için yalnızca o kelime <strong>dictionaryapi.dev</strong>'e
+          gönderilir. Kelime gömülü sözlükte yoksa ya da sen istersen, çeviri için <strong>MyMemory</strong> ve
+          <strong>Google</strong> çeviri servislerine de gönderilir. Bu servislere kimlik bilgin gönderilmez.
+        </p>
+
+        <h2>Yapmadıklarımız</h2>
+        <p>
+          Reklam göstermiyoruz, analitik veya takip aracı kullanmıyoruz, verilerini satmıyor ya da kimseyle
+          paylaşmıyoruz.
+        </p>
+
+        <h2>Silme hakkın</h2>
+        <p>
+          Hesabını ve tüm verilerini uygulama içinden <strong>Ayarlar → Hesabı Sil</strong> ile ya da
+          <a href="/learncard/hesap-silme">hesap silme sayfası</a> üzerinden silebilirsin. Web üzerinden gelen
+          talepler en geç 30 gün içinde tamamlanır. Misafir verileri uygulamayı kaldırınca cihazdan silinir.
+          6698 sayılı KVKK kapsamındaki talepler için <a href={`mailto:${EMAIL}`}>{EMAIL}</a> adresine
+          yazabilirsin.
+        </p>
+
+        <h2>Çocuklar</h2>
+        <p>Uygulama 13 yaş altına yönelik değildir ve bilerek bu yaştaki çocuklardan veri toplamaz.</p>
+
+        <h2>Değişiklikler</h2>
+        <p>Bu politikayı güncellersek bu sayfadaki tarihi değiştirir ve uygulama içinde duyururuz.</p>
+
+        <h2 lang="en">English summary</h2>
+        <div lang="en">
+          <p>
+            <strong>LearnCard</strong> (developer: Muhammet Emin Akkaya) helps you read in a foreign language
+            and learn vocabulary.
+          </p>
+          <ul>
+            <li><strong>Guest mode:</strong> no account needed; your cards, texts and stats stay on your device.</li>
+            <li>
+              <strong>With an account</strong> we store your email address (sign-in, verification, password
+              reset) and your flashcards, review history and saved texts (sync across devices), hosted on
+              Supabase. Database rules only let each user access their own data.
+            </li>
+            <li>
+              <strong>Third parties:</strong> Turkish meanings come from a dictionary bundled in the app
+              (Wiktionary). When you tap a word, only that word is sent to dictionaryapi.dev for the English
+              definition and audio; if it is not in the bundled dictionary, or you ask for it, it is also sent
+              to MyMemory and Google translation. No identity data is sent to them.
+            </li>
+            <li><strong>We do not</strong> show ads, use analytics or tracking, or sell or share your data.</li>
+            <li>
+              <strong>Deletion:</strong> delete your account and all data in-app (Settings → Delete account) or
+              via the <a href="/learncard/hesap-silme">account deletion page</a>; web requests are completed
+              within 30 days.
+            </li>
+            <li>Not directed at children under 13.</li>
+            <li>Contact: <a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+</Base>
