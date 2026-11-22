@@ -2,9 +2,9 @@
 title: DncYedek
 slug: dncyedek
 order: 5
-kind: diger
+kind: vitrin
 headline: "Yedeğiniz gerçekten alındı mı? Alınmadıysa haber veriyor"
-status: Geliştiriliyor
+status: Satıldı · kullanımda
 sector: Yedekleme · bayi ve işletmeler
 period: Ekim 2026'dan beri
 summary: Birden çok işletmenin veritabanı yedeklerini tek merkezde toplayan sunucu; yedek gecikirse Telegram veya e-postayla uyarıyor.
@@ -34,5 +34,6 @@ bayiler kendi müşterilerini ayrı bir panelden izliyor.
 
 ## Durum
 
-Geliştirme sürüyor. Büyük dosyalar yüklenirken bile sunucunun bellek kullanımı neredeyse
-artmıyor; bu yüzden küçük, ucuz bir sunucuda çalışabiliyor.
+Sistem satıldı ve şu an müşterinin kendi sunucusunda canlı kullanımda. Büyük dosyalar
+yüklenirken bile sunucunun bellek kullanımı neredeyse artmıyor; bu yüzden küçük, ucuz bir
+sunucuda çalışabiliyor.
