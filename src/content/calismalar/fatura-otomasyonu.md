@@ -8,8 +8,9 @@ status: Kullanımda
 period: Mart 2026'dan beri · en uzun süredir çalışan işim
 sector: e-Arşiv fatura kesen küçük işletmeler
 summary: Her satış için portala girip aynı bilgileri yazmak yerine, satış listesi bir tabloda duruyor; faturaları araç sırayla kesiyor.
-# TODO(Emin): fatura başına önceki/sonraki süre ve aylık fatura adedi gelince ekle.
-metrics: []
+metrics:
+  - { value: "~100", label: "günde kesilen fatura" }
+  - { value: "3+ saat", label: "elle kesilseydi her gün giden süre" }
 tech: [Python, Playwright, Streamlit, Google Sheets API]
 techDetails:
   - "Satış satırları Google Sheets'ten (gspread + servis hesabı) okunuyor; her satır için e-Arşiv portalında fatura formu Playwright ile dolduruluyor."
@@ -35,12 +36,15 @@ araç birkaç kez tekrar deniyor; olmazsa o satırı "Hata" diye işaretleyip di
 böylece iş yarıda kalmıyor ve hangi faturanın kesildiği tablodan görülüyor. ÖTV'li ürünler
 için ayrı bir akış var.
 
+Araç, [WhatsApp sipariş otomasyonunun](/calismalar/whatsapp-siparis) devamı gibi çalışıyor:
+WhatsApp'tan gelip kayda geçen siparişlerin faturası buradan kesiliyor.
+
 ## Ne değişti
 
 - Aynı bilgi artık iki kez yazılmıyor: satış tabloya bir kez giriliyor, faturası oradan kesiliyor.
+- Günde 100 civarı fatura elle tek tek kesilmiyor; bu iş elle yapılsaydı her gün 3 saatten
+  fazla sürerdi.
 - Ay sonunda biriken faturalar tek seferde, sırayla kesilebiliyor.
 - Hangi satışın faturasının kesildiği tabloda yazılı; kontrol için portala girmek gerekmiyor.
 
-<!-- TODO(Emin): fatura başına önceki süre (dk) → şimdiki süre (sn) -->
-<!-- TODO(Emin): ayda kesilen fatura adedi -->
 <!-- TODO(Emin): kullanan işletmeden yorum varsa frontmatter'a quote ekle. -->

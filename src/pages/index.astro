@@ -20,9 +20,12 @@ const quote = testimonials[0];
   <section class="hero">
     <div class="container hero__inner">
       <p class="eyebrow">Emin Akkaya · İşletmeler için yazılım</p>
-      <h1 class="hero__title">
-        İşletmenizdeki elle yapılan işleri otomatikleştiriyorum: WhatsApp siparişleri, fatura kesme, ERP raporları.
-      </h1>
+      <h1 class="hero__title">İşletmenizdeki elle yapılan işleri otomatikleştiriyorum.</h1>
+      <ul class="hero__chips" role="list" aria-label="Örnek işler">
+        <li><a href="/calismalar/whatsapp-siparis">WhatsApp siparişleri</a></li>
+        <li><a href="/calismalar/fatura-otomasyonu">e-Arşiv fatura</a></li>
+        <li><a href="/calismalar/whatsagent">ERP raporları</a></li>
+      </ul>
       {quote && (
         <figure class="hero__quote">
           <blockquote><p>“{quote.text}”</p></blockquote>
@@ -148,6 +151,27 @@ const quote = testimonials[0];
       max-width: 22ch;
     }
     @media (min-width: 768px) { .hero__title { max-width: 26ch; } }
+    .hero__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      list-style: none;
+      padding: 0;
+    }
+    .hero__chips a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 36px;
+      padding: 0 var(--space-3);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: var(--fs-sm);
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease), background-color var(--duration-fast) var(--ease);
+    }
+    .hero__chips a:hover { color: var(--accent-fg); border-color: var(--accent); background: var(--accent-subtle); }
     .hero__quote {
       max-width: var(--measure);
       padding-inline-start: var(--space-4);
