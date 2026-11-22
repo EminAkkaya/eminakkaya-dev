@@ -68,11 +68,16 @@
   .section + .section { border-top: 1px solid var(--border); }
 
   .grid {
+    --grid-gap: var(--space-4);
     display: grid;
-    gap: var(--space-4);
+    gap: var(--grid-gap);
     grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--grid-min, 280px)), 1fr));
   }
-  @media (min-width: 768px) { .grid { gap: var(--space-5); } }
+  @media (min-width: 768px) { .grid { --grid-gap: var(--space-5); } }
+  /* En fazla iki sütun: 4 kart 3+1 yerine 2+2 dizilir. */
+  .grid--2 {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, max(var(--grid-min, 280px), (100% - var(--grid-gap)) / 2)), 1fr));
+  }
 
   .cluster {
     display: flex;

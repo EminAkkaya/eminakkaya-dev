@@ -3,8 +3,8 @@ title: DncYedek
 slug: dncyedek
 order: 5
 kind: vitrin
-headline: "Yedeğiniz gerçekten alındı mı? Alınmadıysa haber veriyor"
-status: Satıldı · kullanımda
+headline: "Tüm yedekleriniz kendi sunucunuzda, tek yerde ve kontrol altında"
+status: Kullanımda
 sector: Yedekleme · bayi ve işletmeler
 period: Ekim 2026'dan beri
 summary: Birden çok işletmenin veritabanı yedeklerini tek merkezde toplayan sunucu; yedek gecikirse Telegram veya e-postayla uyarıyor.

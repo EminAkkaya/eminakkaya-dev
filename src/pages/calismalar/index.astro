@@ -21,7 +21,7 @@ const groups = [
       {groups.filter((g) => g.items.length).map((g) => (
         <>
           <h2 class="group-title">{g.title}</h2>
-          <div class="grid" style={`--grid-min: ${g.size === 'sm' ? 240 : 300}px`}>
+          <div class={g.size === 'lg' ? 'grid grid--2' : 'grid'} style={`--grid-min: ${g.size === 'sm' ? 240 : 300}px`}>
             {g.items.map((p) => <ProjectCard project={p} size={g.size} />)}
           </div>
         </>
